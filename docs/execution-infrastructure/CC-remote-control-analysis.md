@@ -1,7 +1,7 @@
 ---
 title: CC Remote Control Analysis
 source: https://code.claude.com/docs/en/remote-control
-purpose: Analysis of Claude Code Remote Control for mobile monitoring of Ralph loop runs and cross-device session continuity within Agents-eval workflows.
+purpose: Analysis of Claude Code Remote Control for mobile monitoring of long-running CC sessions and cross-device session continuity.
 created: 2026-03-07
 ---
 
@@ -75,33 +75,33 @@ Enable for all sessions automatically:
 
 <!-- markdownlint-enable MD013 -->
 
-## Relevance to This Project
+## Applicability to Common Workflows
 
 <!-- markdownlint-disable MD013 -->
 
 | Workflow | Fit | Rationale |
 | -------- | --- | --------- |
-| Monitor Ralph loop (`make ralph`) from phone | Strong | Watch autonomous iterations progress without staying at desk; send corrections if stuck |
-| Monitor CC teams runs (`make cc_run_teams`) | Strong | Same — observe parallel agent coordination remotely |
-| Interactive development (debugging, iteration) | Moderate | Useful for couch-coding but VS Code integration already covers this |
-| Writeup generation (`make writeup`) | Weak | Batch process — no need for interactive monitoring |
+| Monitor autonomous development loop from phone | Strong | Watch iterations progress without staying at desk; send corrections if stuck |
+| Monitor CC teams runs | Strong | Same — observe parallel agent coordination remotely |
+| Interactive development (debugging, iteration) | Moderate | Useful for remote coding sessions |
+| Batch processes | Weak | No need for interactive monitoring on non-interactive runs |
 | Headless `claude -p` invocations | None | Print mode exits on completion; no persistent session to connect to |
 
 <!-- markdownlint-enable MD013 -->
 
 ### Decision Rule
 
-**Use Remote Control to monitor long-running interactive sessions (Ralph loop, teams mode) from mobile. Not useful for headless/print-mode invocations.**
+**Use Remote Control to monitor long-running interactive sessions (autonomous loops, teams mode) from mobile. Not useful for headless/print-mode invocations.**
 
 ### Potential Integration
 
 ```makefile
 # Example (NOT implemented — YAGNI until measured need)
-ralph_remote:
-    cd $(PROJECT_DIR) && claude remote-control --name "Ralph: $(shell date +%Y%m%d-%H%M)"
+loop_remote:
+    cd $(PROJECT_DIR) && claude remote-control --name "Loop: $(shell date +%Y%m%d-%H%M)"
 ```
 
-**Recommendation**: No integration needed. Remote Control is a per-developer workflow preference, not a project-level configuration. Developers can run `claude remote-control` manually when they want mobile access. Document the pattern in a usage guide if demand arises.
+**Recommendation**: No project-level integration needed. Remote Control is a per-developer workflow preference. Developers can run `claude remote-control` manually when they want mobile access. Document the pattern in a usage guide if demand arises.
 
 ## References
 

@@ -1,7 +1,7 @@
 ---
 title: Claude Chrome Extension Analysis
 source: https://claude.com/chrome
-purpose: Evaluate the Claude Chrome extension for potential relevance to Agents-eval workflows.
+purpose: Evaluate the Claude Chrome extension for potential relevance to CC-based workflows.
 created: 2026-03-07
 ---
 
@@ -18,22 +18,22 @@ A Chrome browser extension that allows Claude to navigate, click, and fill forms
 - **Availability**: All paid plans, installable via Chrome Web Store ([source][chrome-product])
 - **Safety**: Beta with "unique risks" — Anthropic recommends users stay alert and protect against bad actors ([source][chrome-product])
 
-## Relevance to This Project
+## Applicability
 
 <!-- markdownlint-disable MD013 -->
 
 | Aspect | Fit | Rationale |
 | ------ | --- | --------- |
-| Browser automation for eval workflows | None | Evaluation pipeline is API/CLI-based, no browser interaction needed |
-| Cross-platform integration with CC | Weak | CC integration is useful but this project's CC usage is headless (`claude -p`) |
-| Form filling / web scraping | None | Data sourced from HuggingFace API and local files, not web forms |
-| End-to-end workflows with Cowork | None | No Cowork adoption planned (see [CC-cowork-plugins-enterprise-analysis.md](CC-cowork-plugins-enterprise-analysis.md)) |
+| Browser automation for API/CLI workflows | None | API/CLI-based pipelines have no browser interaction surface |
+| Cross-platform integration with CC | Weak | CC integration is useful but headless `claude -p` usage gets no benefit |
+| Form filling / web scraping | Conditional | Relevant only if a project's data sources require browser-based retrieval |
+| End-to-end workflows with Cowork | Conditional | Only relevant if Cowork is adopted (see [CC-cowork-plugins-enterprise-analysis.md](CC-cowork-plugins-enterprise-analysis.md)) |
 
 <!-- markdownlint-enable MD013 -->
 
 ### Decision Rule
 
-**No adoption action. The Chrome extension targets browser-based knowledge work (form filling, web navigation, cross-app workflows). This project's evaluation pipeline is entirely API/CLI-driven with no browser interaction surface.**
+**The Chrome extension targets browser-based knowledge work (form filling, web navigation, cross-app workflows). Projects whose CC usage is entirely API/CLI-driven gain no benefit and need no adoption action.**
 
 ## References
 

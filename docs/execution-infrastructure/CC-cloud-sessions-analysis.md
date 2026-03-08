@@ -1,7 +1,7 @@
 ---
 title: CC Cloud Sessions (Claude Code on the Web) Analysis
 source: https://code.claude.com/docs/en/claude-code-on-the-web
-purpose: Analysis of Claude Code cloud execution for parallel baseline collection, remote task offloading, and CI-like autonomous runs within Agents-eval workflows.
+purpose: Analysis of Claude Code cloud execution for parallel baseline collection, remote task offloading, and CI-like autonomous runs.
 created: 2026-03-07
 ---
 
@@ -82,17 +82,17 @@ pip install -r requirements.txt
 
 Shares rate limits with all Claude/Claude Code usage. Parallel tasks consume proportionally more ([source][cc-cloud]).
 
-## Relevance to This Project
+## Applicability to Common Workflows
 
 <!-- markdownlint-disable MD013 -->
 
 | Workflow | Fit | Rationale |
 | -------- | --- | --------- |
 | Parallel CC baseline collection | Strong | `claude --remote` can run N tasks simultaneously on cloud VMs; no local resource contention |
-| Ralph loop execution | Moderate | Could run `claude --remote "Execute stories from prd.json"` but loses local state files and MCP servers |
+| Autonomous development loop execution | Moderate | Could run `claude --remote "Execute next iteration"` but loses local state files and MCP servers |
 | CI/CD integration (PR review) | Strong | Kick off cloud session for automated review; results appear as PR |
 | Interactive development | Weak | Latency to clone + setup; better to use local CC or Remote Control |
-| Writeup generation | Weak | Needs local LaTeX toolchain, pandoc, custom scripts — cloud VM setup would be complex |
+| Workflows requiring local toolchains | Weak | Custom toolchains (LaTeX, pandoc, etc.) need complex setup scripts to replicate in cloud |
 
 <!-- markdownlint-enable MD013 -->
 
@@ -112,19 +112,19 @@ cc_run_cloud:
     @echo "Monitor with: /tasks"
 ```
 
-**Recommendation**: Worth exploring for CC baseline collection where local resources are constrained. Key blockers for deeper adoption:
+**Recommendation**: Worth exploring for baseline collection where local resources are constrained. Key blockers for deeper adoption:
 
-1. **GitHub-only** — project must be on GitHub (already is)
-2. **No local MCP servers** — Context7, Exa, and IDE MCP servers unavailable in cloud
-3. **No persistent state** — `~/.claude/teams/` and Ralph state files not available
-4. **Setup script complexity** — Would need to install uv, project deps, and configure env
+1. **GitHub-only** — your project must be on GitHub
+2. **No local MCP servers** — MCP servers configured in your local `.claude/settings.json` are unavailable in cloud
+3. **No persistent state** — `~/.claude/teams/` and local state files not available
+4. **Setup script complexity** — Would need to install project deps and configure env in a setup script
 5. **Research preview** — pricing and availability may change
 
 Revisit when:
 
 1. Cloud sessions support custom Docker images or snapshots
 2. MCP server forwarding becomes available
-3. Baseline collection needs more parallelism than local machine can provide
+3. Baseline collection needs more parallelism than a local machine can provide
 
 ## References
 

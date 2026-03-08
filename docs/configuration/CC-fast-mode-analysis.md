@@ -1,7 +1,7 @@
 ---
 title: CC Fast Mode Analysis
 source: https://code.claude.com/docs/en/fast-mode
-purpose: Analysis of Claude Code Fast Mode for potential adoption within Agents-eval workflows.
+purpose: Analysis of Claude Code Fast Mode for potential adoption within CC-based workflows.
 created: 2026-02-17
 updated: 2026-03-07
 ---
@@ -65,15 +65,15 @@ Or toggle per-session: `/fast` (persists across sessions). CLI flag: `--fast`.
 
 Combinable: fast mode + lower effort for maximum speed on simple tasks.
 
-## Relevance to This Project
+## Applicability
 
 | Workflow | Fit | Rationale |
 | -------- | --- | --------- |
 | Interactive development (debugging, iteration) | Strong | Latency reduction directly improves developer flow |
-| Ralph loop (`claude -p`) | Weak | Autonomous execution — developer not waiting; cost matters more |
-| Ralph teams mode (`TEAMS=true`) | Weak | Same as above; parallel stories multiply the cost further |
-| Writeup generation (`make writeup`) | Weak | Batch/autonomous; no interactive waiting |
-| CC baseline collection (`cc_run_solo`, `cc_run_teams`) | Neutral | Faster collection but 2x+ cost; only worth it under time pressure |
+| Autonomous headless loop (`claude -p`) | Weak | Developer not waiting; cost matters more than speed |
+| Parallel autonomous tasks | Weak | Same as above; multiple concurrent agents multiply the cost further |
+| Batch/background generation tasks | Weak | No interactive waiting; cost efficiency preferred |
+| Time-boxed collection runs | Neutral | Faster turnaround but 2x+ cost; only worth it under time pressure |
 
 ### Decision Rule
 
@@ -86,15 +86,15 @@ If adopted, fast mode could be passed through Makefile recipes:
 ```makefile
 # Example (NOT implemented — YAGNI until measured need)
 FAST_MODE ?= false
-ralph_run:
+autonomous_run:
     $(if $(filter true,$(FAST_MODE)),--fast)
 ```
 
-**Recommendation**: Do not integrate yet. Fast mode is a research preview with unstable pricing. The project's primary CC usage (`claude -p` in Ralph and baselines) is autonomous — the 2.5x speed gain doesn't justify 2x+ cost increase when no human is waiting. Revisit if:
+**Recommendation**: Do not integrate yet. Fast mode is a research preview with unstable pricing. Headless CC usage (`claude -p`) is autonomous — the 2.5x speed gain doesn't justify 2x+ cost increase when no human is waiting. Revisit if:
 
 1. Pricing stabilizes and drops
-2. Ralph loop becomes interactive (unlikely by design)
-3. Time-boxed evaluation runs need faster turnaround
+2. The autonomous loop becomes interactive (unlikely by design)
+3. Time-boxed runs need faster turnaround
 
 ## References
 

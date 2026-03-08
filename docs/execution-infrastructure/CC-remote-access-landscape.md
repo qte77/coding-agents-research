@@ -1,7 +1,7 @@
 ---
 title: CC Remote Access Landscape
 source: https://omnara.com, https://cloudcli.ai, https://code.claude.com/docs/en/remote-control
-purpose: Comparison of remote access options for monitoring and steering Claude Code sessions (Ralph loop, teams, baselines) from mobile/web.
+purpose: Comparison of remote access options for monitoring and steering Claude Code sessions (autonomous loops, teams, baselines) from mobile/web.
 created: 2026-03-07
 ---
 
@@ -9,7 +9,7 @@ created: 2026-03-07
 
 ## Problem Statement
 
-Ralph loop and CC teams runs are long-running interactive sessions. Currently, the developer must stay at the terminal to provide input, approve permissions, or steer when stuck. Remote access enables monitoring and steering from phone/web without being desk-bound.
+Autonomous development loops and CC teams runs are long-running interactive sessions. Currently, the developer must stay at the terminal to provide input, approve permissions, or steer when stuck. Remote access enables monitoring and steering from phone/web without being desk-bound.
 
 ## Options Compared
 
@@ -55,7 +55,7 @@ Already analyzed in [CC-remote-control-analysis.md](CC-remote-control-analysis.m
 - **Multi-tool**: Works with Claude Code, Cursor, Codex, Gemini ([source][cloudcli])
 - **Flow**: Start from phone/browser/Linear/Jira → continue in VS Code/Cursor over SSH ([source][cloudcli])
 - **Cloud-first**: Sessions run in cloud VMs, not local machine ([source][cloudcli])
-- **Less relevant**: Our workflows depend on local MCP servers, state files, and project config
+- **Less relevant for local-first workflows**: Sessions run in cloud VMs, not local machine — no access to local MCP servers, state files, or project config
 
 ### DIY (tmux + Tailscale/SSH)
 
@@ -64,14 +64,14 @@ Already analyzed in [CC-remote-control-analysis.md](CC-remote-control-analysis.m
 - **Overhead**: Manual setup, no push notifications, raw terminal on mobile
 - **Already possible**: No new tooling needed if tmux is available
 
-## Relevance to This Project
+## Workflow Fit by Use Case
 
 <!-- markdownlint-disable MD013 -->
 
 | Workflow | Best Option | Rationale |
 | -------- | ----------- | --------- |
-| Monitor Ralph loop from phone | CC Remote Control | Free, zero-setup, sufficient for steering |
-| Long Ralph runs (laptop may sleep) | Omnara or tmux on server | CC RC drops on sleep; need offline continuation |
+| Monitor autonomous loop from phone | CC Remote Control | Free, zero-setup, sufficient for steering |
+| Long runs where laptop may sleep | Omnara or tmux on server | CC RC drops on sleep; need offline continuation |
 | CC teams monitoring | CC Remote Control | Multi-surface sync for single session |
 | Parallel baseline collection | CC Cloud Sessions (`--remote`) | See [CC-cloud-sessions-analysis.md](CC-cloud-sessions-analysis.md) |
 | Security-sensitive work | DIY (tmux + Tailscale) | No third-party servers; full control |
@@ -80,7 +80,7 @@ Already analyzed in [CC-remote-control-analysis.md](CC-remote-control-analysis.m
 
 ### Decision Rule
 
-**Start with CC Remote Control (free, native, zero-setup). Only evaluate Omnara if offline continuation becomes a real bottleneck — i.e., Ralph runs regularly stall because the laptop sleeps mid-session.**
+**Start with CC Remote Control (free, native, zero-setup). Only evaluate Omnara if offline continuation becomes a real bottleneck — i.e., autonomous loop runs regularly stall because the laptop sleeps mid-session.**
 
 ### Risk Assessment
 
@@ -88,13 +88,13 @@ Already analyzed in [CC-remote-control-analysis.md](CC-remote-control-analysis.m
 | ------ | ---- | ---------- |
 | CC Remote Control | Session drops on laptop sleep | Keep laptop on power + prevent sleep during runs |
 | Omnara | Startup risk (3-person team, already pivoted once); no E2E encryption | Don't send sensitive code; evaluate stability before adopting |
-| CloudCLI | Cloud-first doesn't fit local MCP/state workflow | Only for tasks that don't need local config |
+| CloudCLI | Cloud-first doesn't fit local MCP/state workflows | Only for tasks that don't need local config |
 | DIY | Setup overhead, raw terminal UX on mobile | One-time setup; acceptable for power users |
 
 ### Actionable Next Steps
 
 1. **Try CC Remote Control** — see [CC-remote-control-analysis.md](CC-remote-control-analysis.md) for setup and decision rationale
-2. **Measure**: Does the laptop actually sleep during runs? If not, CC RC is sufficient and no further evaluation needed
+2. **Measure**: Does the laptop actually sleep during long runs? If not, CC RC is sufficient and no further evaluation needed
 3. **If sleep is a problem**: Evaluate Omnara's cloud sandbox failover on a non-sensitive test repo first
 
 ## References

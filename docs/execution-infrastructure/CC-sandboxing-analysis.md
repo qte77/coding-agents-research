@@ -1,6 +1,6 @@
 ---
 title: Claude Code Sandboxing and Security Analysis
-description: Analysis of CC sandboxing mechanics, configuration options, security model, and this project's sandbox setup.
+description: Analysis of CC sandboxing mechanics, configuration options, security model, and sandbox configuration options.
 source: https://code.claude.com/docs/en/sandboxing, https://code.claude.com/docs/en/settings#sandbox-settings, https://code.claude.com/docs/en/security
 category: analysis
 created: 2026-03-07
@@ -27,7 +27,7 @@ backdoor system resources to gain network access.
 | WSL1 | Not supported | bubblewrap requires WSL2 kernel features |
 | Windows | Not supported | Planned |
 
-## This Project's Configuration
+## Example Configuration
 
 From `.claude/settings.json`:
 
@@ -57,17 +57,18 @@ From `.claude/settings.json`:
 - [x] Network restricted to `api.github.com` only
 - [x] Filesystem writes restricted to `/tmp/claude-1000` and `.git`
 - [ ] `raw.githubusercontent.com` not in `allowedHosts` — needed if fetching
-  raw GitHub content (e.g., PeerRead dataset downloads)
-- [ ] No `allowedDomains` for PyPI/npm — `uv sync` and `npm install` must run
+  raw GitHub content
+- [ ] No `allowedDomains` for PyPI/npm — package install commands must run
   outside sandbox or with `excludedCommands`
 
-Setup recipe in `Makefile`:
+Setup on Linux/WSL2:
 
 ```bash
-make setup_sandbox  # Installs bubblewrap + socat on Linux/WSL2
+sudo apt-get install bubblewrap socat
 ```
 
-Not included in `setup_dev` — must be run separately.
+Or via a Makefile recipe if your project defines one. Not typically bundled with
+the default dev setup — must be run separately.
 
 ## Configuration Reference
 
@@ -143,7 +144,7 @@ domains pass through. Unapproved domain requests trigger permission prompts
 
 When a command fails due to sandbox restrictions, Claude may retry with
 `dangerouslyDisableSandbox`. These go through the normal permission flow. Disable
-with `allowUnsandboxedCommands: false` (as this project does).
+with `allowUnsandboxedCommands: false`.
 
 ### Two Sandbox Modes
 

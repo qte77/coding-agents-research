@@ -1,7 +1,7 @@
 ---
 title: CC Hooks System Analysis
 source: https://code.claude.com/docs/en/hooks
-purpose: Analysis of Claude Code hooks system for automation, quality gates, and Ralph loop integration.
+purpose: Analysis of Claude Code hooks system for automation, quality gates, and headless CC workflow integration.
 created: 2026-03-07
 ---
 
@@ -88,39 +88,41 @@ webhook-style automation without local scripts.
 Agent definitions (`.claude/agents/`) can include hooks in their frontmatter:
 PreToolUse, PostToolUse, Stop. These are scoped to the agent's execution only.
 
-## Relevance to This Project
+## Applicability
 
 | Use Case | Fit | Rationale |
 | -------- | --- | --------- |
-| **Ralph trace collection** | Strong | `PostToolUse` hook sends tool events to Phoenix OTLP; replaces manual artifact parsing |
-| **Quality gates in Ralph** | Strong | `Stop` hook runs `make validate` before marking story passed |
+| **Trace collection** | Strong | `PostToolUse` hook sends tool events to an OTLP receiver; replaces manual artifact parsing |
+| **Quality gates** | Strong | `Stop` hook runs a validation command before marking a task passed |
 | **Permission automation** | Medium | `PermissionRequest` auto-approves known-safe operations for `claude -p` runs |
-| **Agent Teams monitoring** | Medium | `TeammateIdle` / `TaskCompleted` hooks track parallel story progress |
-| **CC baseline collection** | Weak | Hooks run in interactive sessions; `claude -p` has limited hook support |
+| **Agent Teams monitoring** | Medium | `TeammateIdle` / `TaskCompleted` hooks track parallel task progress |
+| **Headless baseline collection** | Weak | Hooks run in interactive sessions; `claude -p` has limited hook support |
 
-### Current Usage in Project
+### Common Usage Patterns
 
-The project currently uses hooks indirectly through:
+Hooks are typically introduced through:
 
 - Agent frontmatter hooks in `.claude/agents/` definitions
 - `<user-prompt-submit-hook>` feedback in interactive sessions
-- No dedicated hook scripts in the repository yet
+- Dedicated hook scripts stored in the repository alongside other automation
 
 ### Potential Integration
+
+Replace `your-validation-command` with the validation command for your project (e.g., `make validate`, `make quick_validate`, or a direct invocation of your linter/test runner):
 
 ```json
 {
   "hooks": {
     "Stop": [
       {
-        "command": "make quick_validate",
+        "command": "your-validation-command",
         "once": true
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Bash",
-        "command": "ralph/scripts/lib/trace-hook.sh"
+        "command": "scripts/trace-hook.sh"
       }
     ]
   }
@@ -137,5 +139,5 @@ resolved or artifact-based collection proves insufficient.
 - [CC Hooks docs](https://code.claude.com/docs/en/hooks)
 - [CC Settings docs](https://code.claude.com/docs/en/settings)
 - [CC Agent Teams docs](https://code.claude.com/docs/en/agent-teams) (TeammateIdle, TaskCompleted hooks)
-- [CC-agent-teams-orchestration.md](CC-agent-teams-orchestration.md) (project-specific teams analysis)
-- [CC-ralph-enhancement-research.md](CC-ralph-enhancement-research.md) (Ralph Wiggum Stop hook pattern)
+- [CC-agent-teams-orchestration.md](../agent-orchestration/CC-agent-teams-orchestration.md) (Agent Teams analysis)
+- [CC-ralph-enhancement-research.md](../agent-orchestration/CC-ralph-enhancement-research.md) (Stop hook pattern for autonomous loops)

@@ -1,19 +1,19 @@
 ---
 title: Ralph Loop Enhancement Research
-source: ralph/scripts/ralph.sh, ralph/README.md, external Ralph pattern research
-purpose: Identify actionable enhancements to the Ralph loop based on internal gap analysis and external pattern research.
+source: ralph/scripts/ralph.sh, ralph/README.md, external Ralph pattern research (ralph/README.md is project-specific; see external references below for the general pattern)
+purpose: Identify actionable enhancements to autonomous headless CC development loops (Ralph pattern) based on gap analysis and external pattern research.
 created: 2026-03-07
 ---
 
-**Status**: Research (informational — feeds into sprint planning)
+**Status**: Research (informational — feeds into iteration planning)
 
 ## Current Architecture Summary
 
-Ralph is an autonomous TDD development loop driving `claude -p` to implement stories from `prd.json`. Full architecture in [ralph/README.md](../../../ralph/README.md); skills adoption in [CC-skills-adoption-analysis.md](CC-skills-adoption-analysis.md).
+Ralph is an autonomous TDD development loop driving `claude -p` to implement stories from a `prd.json` task file. Skills adoption context is in [CC-skills-adoption-analysis.md](CC-skills-adoption-analysis.md).
 
-## Known Gaps (Internal)
+## Common Implementation Gaps
 
-Identified from codebase exploration — these are bugs or inconsistencies, not feature requests.
+These are patterns to watch for in any Ralph implementation — bugs or inconsistencies that commonly appear, not feature requests.
 
 ### High Priority (Broken Functionality)
 
@@ -21,8 +21,8 @@ Identified from codebase exploration — these are bugs or inconsistencies, not 
 
 | Gap | Impact | Fix |
 | --- | ------ | --- |
-| **`ralph_status` uses legacy `.passes` field** | Always shows 0 completed stories on current `status` schema | Change `jq` query from `.passes == true` to `.status == "passed"` in Makefile recipe |
-| **Documentation path inconsistency** | AGENTS.md references `.claude/scripts/ralph/` but actual path is `ralph/scripts/` | Update AGENTS.md to reference `ralph/scripts/` |
+| **Status field name mismatch** | `jq` query references a legacy field name that no longer matches the current `status` schema — always shows 0 completed stories | Audit `jq` queries in Makefile recipes; align field names with the current schema (e.g., `.status == "passed"` rather than a legacy `.passes == true`) |
+| **Documentation path drift** | Project instructions reference one script path (e.g., `.claude/scripts/ralph/`) but actual implementation lives elsewhere (e.g., `ralph/scripts/`) | Update project instructions to reference the actual script location; treat this as a living sync issue whenever scripts are moved |
 
 <!-- markdownlint-enable MD013 -->
 
@@ -32,9 +32,9 @@ Identified from codebase exploration — these are bugs or inconsistencies, not 
 
 | Gap | Impact | Fix |
 | --- | ------ | --- |
-| **`/tmp` path collision across worktrees** | `BASELINE_FILE`, `RETRY_CONTEXT_FILE`, `TDD_VERIFIED_DIR` use fixed `/tmp/claude/ralph_*` paths — concurrent worktrees overwrite each other | Namespace paths by worktree: `/tmp/claude/ralph_<worktree_hash>/` |
+| **Shared `/tmp` paths across worktrees** | State-tracking files (baseline, retry context, TDD-verified directory) use fixed `/tmp` paths — concurrent worktrees overwrite each other | Namespace paths by worktree identity: `/tmp/claude/ralph_<worktree_hash>/` |
 | **Stale snapshot tests in teams mode** | Story A's baseline doesn't account for story B's concurrent changes | No clean fix without sequential validation; document as known limitation |
-| **File-conflict dependencies not auto-detected** | `generate_prd_json.py` doesn't auto-detect file overlaps between stories | Add `--check-overlaps` flag to `generate_prd_json.py` that warns when stories share files without `depends_on` |
+| **File-conflict dependencies not auto-detected** | The PRD/story generation script doesn't auto-detect file overlaps between stories | Add an `--check-overlaps` flag to the story generation script that warns when stories share files without an explicit `depends_on` |
 
 <!-- markdownlint-enable MD013 -->
 
@@ -58,11 +58,11 @@ Identified from codebase exploration — these are bugs or inconsistencies, not 
 Extends Ralph from sequential story execution to DAG-based parallel orchestration:
 
 - RFC (Request for Comments) documents define features with dependency graphs
-- BFS wave computation (similar to our `compute_waves()`)
+- BFS wave computation (similar to Ralph's `compute_waves()`)
 - Parallel agents with merge coordination
 - "De-Sloppify" cleanup passes after initial implementation
 
-**Relevance**: Our `generate_prd_json.py` already computes waves and our teams mode already delegates wave-peers. Ralphinho formalizes this further with RFC documents. The "De-Sloppify" pass pattern is worth adopting — a post-story cleanup iteration focused on code quality rather than feature implementation.
+**Relevance**: A Ralph implementation with `generate_prd_json.py` already computes waves; teams mode can delegate wave-peers in parallel. Ralphinho formalizes this further with RFC documents. The "De-Sloppify" pass pattern is worth adopting — a post-story cleanup iteration focused on code quality rather than feature implementation.
 
 ### Trellis — Cross-Layer Validation Commands
 
@@ -74,20 +74,20 @@ Adds layer-specific quality checks as slash commands:
 - `/check-frontend` — frontend-specific validation (UI tests, accessibility)
 - `/check-cross-layer` — cross-layer consistency
 
-**Relevance**: Our validation is currently monolithic (`make validate`). For future multi-layer projects, scoped validation commands would reduce false-positive blocking. Not needed now — single-layer Python project.
+**Relevance**: A monolithic validation command (e.g., `make validate`) works for single-layer projects. For multi-layer projects, scoped validation commands would reduce false-positive blocking.
 
 ### Stop-Hook Pattern (Official Plugin)
 
 **Source**: Anthropic `ralph-wiggum` plugin ([GitHub][ralph-official])
 
-The official plugin uses a `StopTool` hook that intercepts session exit and re-prompts with the original task. Simpler than our bash loop but less control:
+The official plugin uses a `StopTool` hook that intercepts session exit and re-prompts with the original task. Simpler than the Ralph bash loop but less control:
 
 - No TDD enforcement
 - No baseline-aware validation
 - No story dependency tracking
 - No teams mode
 
-**Relevance**: Our implementation is more sophisticated. The stop-hook pattern is useful for simple tasks but insufficient for our structured PRD-driven workflow.
+**Relevance**: A full Ralph implementation is more sophisticated. The stop-hook pattern is useful for simple tasks but insufficient for structured PRD-driven workflows.
 
 ### Context Rot Prevention
 
@@ -95,11 +95,11 @@ The official plugin uses a `StopTool` hook that intercepts session exit and re-p
 
 Key insight: "Context rot" — agent quality degrades as context fills with stale information. Solutions:
 
-- Fresh context per iteration (our approach: `claude -p` starts clean each time)
-- Filesystem as memory (our approach: `prd.json` + `progress.txt` + git)
+- Fresh context per iteration (`claude -p` starts clean each time)
+- Filesystem as memory (`prd.json` + `progress.txt` + git)
 - Never let the agent compact — start fresh instead
 
-**Relevance**: Already implemented. Our Ralph loop spawns a fresh `claude -p` per story, using external state files for continuity. This is the recommended approach per Huntley and Anthropic's "effective harnesses" guide ([source][effective-harnesses]).
+**Relevance**: Already implemented in the Ralph pattern. The loop spawns a fresh `claude -p` per story, using external state files for continuity. This is the recommended approach per Huntley and Anthropic's "effective harnesses" guide ([source][effective-harnesses]).
 
 ### LobeHub Skills Marketplace
 
@@ -107,25 +107,25 @@ Key insight: "Context rot" — agent quality degrades as context fills with stal
 
 Community-published Ralph loop as a CC Skill. Uses `.claude/ralph-loop.local.md` as state file. Simpler implementation (no PRD, no TDD, no teams) but demonstrates the pattern's portability as a skill.
 
-**Relevance**: Validates that Ralph can be packaged as a CC Skill or Plugin. See [CC-plugin-packaging-research.md](CC-plugin-packaging-research.md) for packaging analysis.
+**Relevance**: Validates that the Ralph loop can be packaged as a CC Skill or Plugin.
 
 ## Actionable Enhancements
 
 ### Tier 1 — Fix Now (bugs, 15 min each)
 
-1. **Fix `ralph_status` jq query**: `.passes == true` → `.status == "passed"`
-2. **Fix AGENTS.md path reference**: `.claude/scripts/ralph/` → `ralph/scripts/`
+1. **Fix status `jq` query**: Align with current schema field name (e.g., `.status == "passed"` rather than a legacy field)
+2. **Fix project instructions path reference**: Sync documented script path with actual filesystem location
 
-### Tier 2 — Improve Next Sprint (robustness)
+### Tier 2 — Improve Next Iteration (robustness)
 
 3. **Namespace `/tmp` paths by worktree**: Prevent concurrent worktree collisions
-4. **Add `--check-overlaps` to `generate_prd_json.py`**: Warn on file conflicts without `depends_on`
-5. **Add De-Sloppify pass**: Post-story cleanup iteration — run `make quick_validate` with a "fix all lint/type/complexity issues" prompt before marking story passed
+4. **Add `--check-overlaps` to story generation script**: Warn on file conflicts without `depends_on`
+5. **Add De-Sloppify pass**: Post-story cleanup iteration — run the project's fast validation command with a "fix all lint/type/complexity issues" prompt before marking story passed
 
 ### Tier 3 — Monitor (not yet actionable)
 
 6. **BDD workflow support**: Add `RALPH_TEST_WORKFLOW` switch when a BDD project needs Ralph
-7. **Cross-layer validation commands**: Add `/check-backend` etc. when project becomes multi-layer
+7. **Cross-layer validation commands**: Add `/check-backend` etc. when a project becomes multi-layer
 8. **Rust/Python rewrite**: When bash brittleness measurably blocks development
 9. **`/loop` command as alternative** (v2.1.71): CC now has a built-in `/loop` command with cron scheduling for recurring prompts/commands on intervals. This overlaps with Ralph's core loop mechanic. Key differences: `/loop` is session-bound (no external state), lacks TDD enforcement, no story dependencies or PRD tracking. Could replace Ralph for simple repeating tasks but insufficient for structured multi-story workflows. Worth monitoring if `/loop` gains state persistence or hook integration.
 

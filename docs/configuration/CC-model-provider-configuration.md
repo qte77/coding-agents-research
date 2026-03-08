@@ -1,7 +1,7 @@
 ---
 title: CC Model & Provider Configuration
 source: https://code.claude.com/docs/en/settings#environment-variables, https://openrouter.ai/docs/guides/guides/coding-agents/claude-code-integration
-purpose: Reference for configuring CC with alternative models, endpoints, API keys, and third-party providers (OpenRouter, Bedrock, Vertex, Foundry).
+purpose: Reference for configuring CC with alternative models, endpoints, API keys, and third-party providers (OpenRouter, Bedrock, Vertex, Foundry). Applicable to any project using Claude Code.
 created: 2026-03-07
 ---
 
@@ -121,30 +121,30 @@ When routing through third-party gateways, additionally set ([source][cc-setting
 | -------- | ------- | ------- |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | Max output tokens | 32,000 (max 64,000) |
 | `CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS` | Token limit for file reads | Default |
-| `CLAUDE_CODE_DISABLE_1M_CONTEXT` | Disable 1M context window (see [extended context analysis](CC-extended-context-analysis.md)) | `1` to disable |
+| `CLAUDE_CODE_DISABLE_1M_CONTEXT` | Disable 1M context window (see [extended context analysis](../context-memory/CC-extended-context-analysis.md)) | `1` to disable |
 
 ([source][cc-settings])
 
 <!-- markdownlint-enable MD013 -->
 
-## Relevance to This Project
+## Applicability
 
 <!-- markdownlint-disable MD013 -->
 
 | Aspect | Fit | Rationale |
 | ------ | --- | --------- |
-| Model override for Ralph (`ANTHROPIC_MODEL`) | Strong | Ralph's `RALPH_MODEL` maps to CC model; direct env var control per run |
+| Model override (`ANTHROPIC_MODEL`) | Strong | Direct env var control per run; useful in any project to select model per task |
 | Subagent model (`CLAUDE_CODE_SUBAGENT_MODEL`) | Strong | Control cost by routing teammates/subagents to cheaper models |
-| OpenRouter for failover | Moderate | Useful if Anthropic API has availability issues during long Ralph runs |
+| OpenRouter for failover | Moderate | Useful if Anthropic API has availability issues during long autonomous runs |
 | OpenRouter for budget controls | Moderate | Team cost management for shared CC usage |
-| Bedrock/Vertex/Foundry | Weak | Not currently using cloud provider APIs for CC |
+| Bedrock/Vertex/Foundry | Conditional | Relevant when a project runs on cloud infrastructure |
 | Effort level tuning | Strong | `CLAUDE_CODE_EFFORT_LEVEL=medium` for routine tasks saves tokens |
 
 <!-- markdownlint-enable MD013 -->
 
 ### Decision Rule
 
-**Model and effort variables are immediately useful** for optimizing Ralph runs (cost vs quality trade-offs). OpenRouter is a Tier 2 research spike if Anthropic API reliability becomes an issue or team budget controls are needed. Cloud providers (Bedrock/Vertex/Foundry) are not relevant until the project runs on cloud infrastructure.
+**Model and effort variables are immediately useful** for optimizing autonomous CC runs (cost vs quality trade-offs). OpenRouter is a Tier 2 research spike if Anthropic API reliability becomes an issue or team budget controls are needed. Cloud providers (Bedrock/Vertex/Foundry) are relevant once a project runs on cloud infrastructure.
 
 ## References
 

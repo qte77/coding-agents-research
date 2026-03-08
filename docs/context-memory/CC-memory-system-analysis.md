@@ -1,7 +1,7 @@
 ---
 title: CC Memory System Analysis
 source: https://code.claude.com/docs/en/memory
-purpose: Analysis of Claude Code's dual memory system (CLAUDE.md + auto memory) for optimizing agent instructions, cross-session learning, and Ralph loop context management within Agents-eval.
+purpose: Analysis of Claude Code's dual memory system (CLAUDE.md + auto memory) for optimizing agent instructions, cross-session learning, and headless CC workflow context management.
 created: 2026-03-07
 ---
 
@@ -107,63 +107,68 @@ Rules without `paths` frontmatter load unconditionally. Path-scoped rules load w
 
 Or: `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` env var.
 
-## Current Project Usage
+## Example Project Usage
 
-This project already uses both systems extensively:
+A well-structured project might use both systems as follows:
 
 ### CLAUDE.md Structure
 
+The filenames below are examples — projects use different names for these concerns:
+
 ```text
-CLAUDE.md              → @AGENTS.md import
+CLAUDE.md              → @AGENTS.md import (or equivalent entry point)
 AGENTS.md              → Behavioral rules, compliance, decision framework
+                          (example name; use any name that fits your project)
 CONTRIBUTING.md        → Technical workflows, coding standards
-AGENT_REQUESTS.md      → Escalation protocol
-AGENT_LEARNINGS.md     → Accumulated pattern knowledge
+ESCALATION.md          → Escalation protocol
+                          (example: "AGENT_REQUESTS.md" in some projects)
+LEARNINGS.md           → Accumulated pattern knowledge
+                          (example: "AGENT_LEARNINGS.md" in some projects)
 .claude/rules/
-├── context-management.md  → ACE-FCA context window principles
+├── context-management.md  → Context window principles
 └── core-principles.md     → KISS/DRY/YAGNI mandatory principles
 ```
 
 ### Auto Memory
 
-Active at `~/.claude/projects/-workspaces-Agents-eval/memory/`. Contains `MEMORY.md` index and topic files accumulated across sessions.
+Active at `~/.claude/projects/<project-path>/memory/`. Contains `MEMORY.md` index and topic files accumulated across sessions.
 
-## Relevance to This Project
+## Usage Considerations
 
 <!-- markdownlint-disable MD013 -->
 
-| Aspect | Current State | Optimization Opportunity |
-| ------ | ------------- | ------------------------ |
-| CLAUDE.md size | AGENTS.md is 200+ lines | Consider splitting role boundaries into `.claude/rules/agent-roles.md` with path scoping |
-| Import chain | CLAUDE.md → AGENTS.md → CONTRIBUTING.md → AGENT_LEARNINGS.md | Deep chain; ensure total token cost is acceptable |
-| Path-scoped rules | 2 rules (context-management, core-principles), both unconditional | Could add path-scoped rules for `src/app/agents/` (agent patterns), `tests/` (testing conventions) |
-| Auto memory | Active, accumulating learnings | Cross-check with AGENT_LEARNINGS.md for duplicates — auto memory and manual learnings may diverge |
-| Ralph loop context | Each iteration starts fresh; reads CLAUDE.md + auto memory | Working as designed — see [CC-ralph-enhancement-research.md](CC-ralph-enhancement-research.md#context-rot-prevention) for context rot analysis |
-| Cloud sessions | N/A | Auto memory is machine-local; cloud sessions rely on committed CLAUDE.md only (see [CC-cloud-sessions-analysis.md](CC-cloud-sessions-analysis.md)) |
-| Managed policy | Not used | Could use for org-wide CC standards if deploying across team |
+| Aspect | Notes | Optimization Opportunity |
+| ------ | ----- | ------------------------ |
+| CLAUDE.md size | Keep under 200 lines per file for best adherence | Consider splitting large sections into `.claude/rules/` files with path scoping |
+| Import chain | CLAUDE.md → supporting docs via `@` imports | Deep chains increase token cost; audit total imported size |
+| Path-scoped rules | Rules without `paths` frontmatter load unconditionally | Add path-scoped rules for specific directories (e.g., agent code, tests) to reduce noise |
+| Auto memory | Accumulates learnings across sessions | Periodically cross-check with manually maintained learnings docs for duplicates or contradictions |
+| Autonomous loop context | Each iteration starts fresh; reads CLAUDE.md + auto memory | Working as designed — see context rot analysis for headless invocation patterns |
+| Cloud sessions | Auto memory is machine-local | Cloud sessions rely on committed CLAUDE.md only (see CC-cloud-sessions-analysis.md) |
+| Managed policy | `/etc/claude-code/CLAUDE.md` | Use for org-wide CC standards when deploying across a team |
 
 <!-- markdownlint-enable MD013 -->
 
 ### Decision Rule
 
-**CLAUDE.md and rules files are the project's primary instruction mechanism and already well-structured. Focus optimization on: (1) path-scoping rules to reduce context noise, (2) keeping CLAUDE.md import chain under 400 total lines, (3) deduplicating auto memory vs AGENT_LEARNINGS.md.**
+**CLAUDE.md and rules files are a project's primary instruction mechanism. Focus optimization on: (1) path-scoping rules to reduce context noise, (2) keeping the CLAUDE.md import chain under 400 total lines, (3) deduplicating auto memory vs manually maintained learnings files.**
 
 ### Potential Optimizations
 
-1. **Path-scope agent role boundaries**:
+1. **Path-scope role or subsystem boundaries**:
 
    ```markdown
    ---
    paths:
-     - "src/app/agents/**/*.py"
+     - "src/agents/**/*.py"
    ---
    # Agent Implementation Rules
-   - Use PydanticAI agent patterns from agent_system.py
+   - Follow established agent patterns for this codebase
    ```
 
-2. **Deduplicate auto memory vs AGENT_LEARNINGS.md**: Run periodic review to ensure auto memory doesn't accumulate stale patterns that contradict updated AGENT_LEARNINGS.md entries.
+2. **Deduplicate auto memory vs learnings files**: Run periodic review to ensure auto memory doesn't accumulate stale patterns that contradict updated entries in a manually maintained learnings document.
 
-**Recommendation**: No structural changes needed. The current CLAUDE.md + rules + auto memory setup is well-aligned with the documented best practices. Minor wins from path-scoping and deduplication reviews.
+**Recommendation**: No structural changes needed for a project already using CLAUDE.md + rules + auto memory. Minor wins from path-scoping and deduplication reviews.
 
 ## References
 

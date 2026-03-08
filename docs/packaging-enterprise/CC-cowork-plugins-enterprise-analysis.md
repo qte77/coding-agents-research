@@ -1,7 +1,7 @@
 ---
 title: CC Cowork, Plugins & Enterprise Analysis
 source: https://claude.com/blog/cowork-plugins-across-enterprise, https://claude.com/product/cowork
-purpose: Analysis of Claude's Cowork enterprise platform, plugin architecture, and connector ecosystem for potential relevance to Agents-eval MAS evaluation framework.
+purpose: Analysis of Claude's Cowork enterprise platform, plugin architecture, and connector ecosystem for potential relevance to projects using Claude Code.
 created: 2026-03-07
 ---
 
@@ -59,40 +59,40 @@ Claude coordinates tasks across Excel and PowerPoint — running analyses in one
 - Admin controls (branding, provisioning, connectors): Team and Enterprise
 - Excel/PowerPoint cross-app: Research preview, paid plans, Mac and Windows ([source][cowork-blog])
 
-## Relevance to This Project
+## Applicability
 
 <!-- markdownlint-disable MD013 -->
 
 | Aspect | Fit | Rationale |
 | ------ | --- | --------- |
-| Plugin architecture for evaluation agents | Moderate | Plugins as portable agent bundles could package our evaluation pipeline (Researcher/Analyst/Synthesizer) for distribution |
-| OTel support for usage tracking | Strong | Aligns with existing Phoenix/OTel strategy (see [CC-agent-teams-orchestration.md](CC-agent-teams-orchestration.md#tracing--observability)) |
-| Connector ecosystem | Weak | Project doesn't integrate with Google Workspace, Docusign, etc. |
-| Pre-built templates | Weak | Templates target business workflows, not research/evaluation |
-| Multi-app orchestration (Excel/PowerPoint) | None | No Excel/PowerPoint in evaluation workflows |
-| Organization marketplace | Moderate | Could distribute evaluation skills/plugins to research team |
+| Plugin architecture for agent bundles | Moderate | Plugins as portable agent bundles can package a project's agents for distribution across teams |
+| OTel support for usage tracking | Strong | Aligns with Phoenix/OTel observability strategies (see [CC-agent-teams-orchestration.md](../agent-orchestration/CC-agent-teams-orchestration.md#tracing--observability)) |
+| Connector ecosystem | Conditional | Relevant only if a project integrates with Google Workspace, Docusign, or other supported services |
+| Pre-built templates | Weak | Templates target business workflows; technical/research projects typically need custom agents |
+| Multi-app orchestration (Excel/PowerPoint) | Conditional | Only relevant if a project's workflows span Excel/PowerPoint |
+| Organization marketplace | Moderate | Valuable for distributing skills and agents to a broader team |
 
 <!-- markdownlint-enable MD013 -->
 
-### Plugin Architecture vs Project Skills
+### Plugin Architecture vs Repo-Local Skills
 
-Current Skills architecture documented in [CC-skills-adoption-analysis.md](CC-skills-adoption-analysis.md). Key differences: Plugins are cross-platform (Cowork + Agent SDK) with org marketplace distribution and admin provisioning; Skills are repo-local with auto-discovery. Plugins add structured form UI and OTel integration that Skills lack.
+Current Skills architecture is documented in [CC-skills-adoption-analysis.md](../agent-orchestration/CC-skills-adoption-analysis.md). Key differences: Plugins are cross-platform (Cowork + Agent SDK) with org marketplace distribution and admin provisioning; Skills are repo-local with auto-discovery. Plugins add structured form UI and OTel integration that Skills lack.
 
 ### Decision Rule
 
-**Cowork/Plugins are enterprise deployment features. This project's CC usage is developer-local (Ralph loop, baselines, interactive dev). No adoption action needed until the project needs to distribute evaluation capabilities to a broader team.**
+**Cowork/Plugins are enterprise deployment features. Developer-local CC usage (headless autonomous loops, interactive dev) gains no benefit. No adoption action is needed until capabilities need to be distributed to a broader team.**
 
 ### Potential Future Integration
 
-If the evaluation framework becomes a team-wide tool:
+If the framework or tooling becomes a team-wide tool:
 
-1. **Package evaluation pipeline as a plugin** — portable bundle with Researcher/Analyst/Synthesizer agents
-2. **Use OTel support** for centralized cost/usage tracking across team members running evaluations
-3. **Create org marketplace** for evaluation skill distribution
+1. **Package agents as a plugin** — portable bundle for distribution across team members
+2. **Use OTel support** for centralized cost/usage tracking across members running CC workflows
+3. **Create org marketplace** for skill and agent distribution
 
-**Recommendation**: Do not integrate. Cowork/Plugins target enterprise deployment and team-wide AI customization. This project is a research evaluation framework used by individual developers. The existing Skills architecture (`.claude/skills/`) already provides the modular capability pattern needed. Revisit if:
+**Recommendation**: Do not integrate unless there is team distribution need. Cowork/Plugins target enterprise deployment and team-wide AI customization. The existing repo-local Skills architecture (`.claude/skills/`) already provides the modular capability pattern for individual developer use. Revisit if:
 
-1. Evaluation framework needs distribution to non-developer stakeholders
+1. Agents or skills need distribution to non-developer stakeholders
 2. Plugin API stabilizes and supports programmatic creation
 
 ## References

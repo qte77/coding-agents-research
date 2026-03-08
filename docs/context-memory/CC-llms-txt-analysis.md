@@ -1,12 +1,12 @@
 ---
 title: llms.txt Specification, Anthropic Documentation Index, and Project Implementation
-description: Analysis of the llms.txt standard, Anthropic's documentation surface area, and this project's template and workflows.
+description: Analysis of the llms.txt standard, Anthropic's documentation surface area, and a project's template and workflows.
 source: https://llmstxt.org/, https://platform.claude.com/llms.txt, https://code.claude.com/docs/llms.txt
 category: analysis
 created: 2026-03-07
 ---
 
-**Status**: Stable (spec analysis + 651-page Anthropic index + project implementation)
+**Status**: Stable (spec analysis + 651-page Anthropic index + example project implementation)
 
 ## Summary
 
@@ -15,7 +15,7 @@ site's root, designed for AI agents to discover project documentation at
 inference time. It solves the context-window problem: websites have too much
 HTML/JS/nav boilerplate for LLMs to process efficiently.
 
-This project implements llms.txt via two GitHub workflows and a curated template.
+A project can implement llms.txt via GitHub workflows and a curated template (see example below).
 
 ## Specification (llmstxt.org)
 
@@ -104,7 +104,7 @@ Ruby, Terraform, TypeScript.
 - Each entry has 1-2 sentence description
 - No `## Optional` section, no `llms-full.txt` companion
 
-### Key URLs for This Project
+### Key URLs for CC Research
 
 <!-- markdownlint-disable MD013 -->
 
@@ -128,8 +128,8 @@ Ruby, Terraform, TypeScript.
 
 <!-- markdownlint-disable MD013 -->
 
-| Attribute | platform.claude.com | code.claude.com | This project |
-| --------- | ------------------- | --------------- | ------------ |
+| Attribute | platform.claude.com | code.claude.com | Example project |
+| --------- | ------------------- | --------------- | --------------- |
 | H2 sections | 3 grouped | None (flat list) | 5 grouped |
 | Link count | ~400+ | ~70 | ~17 |
 | Link format | `**[name](url)** - desc` | `[name](url): desc` | `[name](url): desc` |
@@ -139,64 +139,63 @@ Ruby, Terraform, TypeScript.
 
 <!-- markdownlint-enable MD013 -->
 
-## This Project's Implementation
+## Example Project Implementation
 
 ### Template
 
-`.github/templates/llms.txt.tpl` — curated markdown with `${BLOB}` placeholder
-for GitHub blob URLs. Currently has 5 H2 sections and 17 links.
+A template file (e.g., `.github/templates/llms.txt.tpl`) holds curated markdown with a `${BLOB}` placeholder for GitHub blob URLs. A typical implementation has 5 H2 sections and ~17 links.
 
 ### Workflows
 
-**`write-llms-txt.yaml`** — Generates `docs/llms.txt` from template:
+**Generation workflow** (e.g., `write-llms-txt.yaml`) — Generates `docs/llms.txt` from template:
 
 1. Validates all template links point to existing files
 2. Substitutes `${BLOB}` with `github.com/{repo}/blob/main`
 3. Commits `docs/llms.txt` if changed
 4. Triggers on push to `main` when docs/src/template change
 
-**`generate-deploy-mkdocs-ghpages.yaml`** — Deploys docs site:
+**Deploy workflow** (e.g., `deploy-docs.yaml`) — Deploys docs site:
 
 1. Copies `docs/llms.txt` to `site/llms.txt` at site root
 2. Serves raw llms.txt at the documentation site root per spec
 
-### Current Template Sections
+### Example Template Sections
 
 | Section | Links | Coverage |
 | ------- | ----- | -------- |
-| Getting Started | 3 | README, CONTRIBUTING, AGENTS |
-| Architecture & Design | 3 | architecture.md, UserStory, roadmap |
-| Usage & Operations | 2 | PeerRead usage, troubleshooting |
-| Best Practices | 4 | MAS design, security, testing, Python |
-| Optional | 5 | Security advisories, CC analysis, landscape |
+| Getting Started | 3 | README, contributing guide, agent rules |
+| Architecture & Design | 3 | architecture doc, user stories, roadmap |
+| Usage & Operations | 2 | usage guide, troubleshooting |
+| Best Practices | 4 | system design, security, testing, language conventions |
+| Optional | 5 | Security advisories, CC analysis, landscape research |
 
-## Relevance to This Project
+## Relevance for CC Research
 
 <!-- markdownlint-disable MD013 -->
 
 | Documentation Area | Fit | Rationale |
 | ------------------ | --- | --------- |
-| Agent SDK | Strong | Alternative/complement to PydanticAI for agent orchestration |
+| Agent SDK | Strong | Foundation for understanding CC agent orchestration and subagent architecture |
 | Batch Processing | Strong | 50% cost reduction for evaluation runs |
 | CC Analytics API | Strong | Programmatic cost/usage data for CC baseline evaluation |
-| Structured Outputs | Moderate | API-level reference for debugging PydanticAI structured outputs |
-| Eval Tool | Moderate | Compare with our three-tier pipeline |
-| Skills API | Moderate | Programmatic skill management if adopting Cowork plugins |
+| Structured Outputs | Moderate | API-level reference for debugging structured output issues |
+| Eval Tool | Moderate | Anthropic's own evaluation tooling for comparison |
+| Skills API | Moderate | Programmatic skill management if adopting CC plugins |
 
 <!-- markdownlint-enable MD013 -->
 
 ### Priority Research Queue
 
-1. **Batch Processing** — Evaluate for tier 2 LLM judge calls (50% cost savings)
+1. **Batch Processing** — Evaluate for bulk LLM calls (50% cost savings)
 2. **CC Analytics API** — Programmatic alternative to manual cost tracking
-3. **Agent SDK Subagents** — Compare with PydanticAI delegation patterns
-4. **Eval Tool** — Compare Anthropic's evaluation approach with our pipeline
+3. **Agent SDK Subagents** — Subagent architecture and delegation patterns
+4. **Eval Tool** — Compare Anthropic's evaluation approach with custom pipelines
 
-### Improvement Opportunities (Project llms.txt)
+### Improvement Opportunities (project llms.txt)
 
 - [ ] Add `llms-full.txt` companion (following platform.claude.com pattern)
 - [ ] Add descriptions to links (currently most have none)
-- [ ] Add Ralph section for autonomous development documentation
+- [ ] Add section for autonomous development loop documentation
 - [ ] Add blockquote summary (spec recommends it)
 
 ## References

@@ -1,7 +1,7 @@
 ---
 title: CC Agent Teams Orchestration
 source: https://code.claude.com/docs/en/agent-teams
-purpose: Analysis of Claude Code Agent Teams for parallel code review, cross-layer implementation, and adversarial debugging within Agents-eval.
+purpose: Analysis of Claude Code Agent Teams for parallel code review, cross-layer implementation, and adversarial debugging.
 created: 2026-02-08
 updated: 2026-03-07
 test_run: 2026-02-11 (parallel code review with 3 teammates)
@@ -31,7 +31,7 @@ Coordinates multiple independent CC sessions with:
 
 - Lead spawns teammates, coordinates work; each teammate is a full CC instance
 - Shared task list (pending/in-progress/completed) with dependency tracking
-- Teammates load project context (CLAUDE.md, MCP servers, skills) automatically
+- Teammates load project context (project instructions, MCP servers, skills) automatically
 - Lead's conversation history does NOT carry over to teammates
 - Display: in-process (single terminal) or split panes (tmux/iTerm2)
 
@@ -70,7 +70,7 @@ Restricts lead to coordination-only (spawn, assign, synthesize). Blocks direct i
 
 <!-- markdownlint-enable MD013 -->
 
-## Relevance to This Project
+## Use Cases
 
 | Use Case | Fit | Rationale |
 | -------- | --- | --------- |
@@ -78,7 +78,7 @@ Restricts lead to coordination-only (spawn, assign, synthesize). Blocks direct i
 | Cross-layer feature implementation (backend + tests) | Strong | Enforces role separation (architect/developer/reviewer) |
 | Research + competing hypotheses debugging | Strong | Adversarial debate addresses anchoring bias |
 
-**Overlaps**: Subagents for fire-and-forget work (replace only when inter-agent communication needed). Ralph loop now supports teams mode (`make ralph_run TEAMS=true`) for inter-story parallelism. Skills load automatically in teammates.
+**Overlaps**: Subagents for fire-and-forget work (replace only when inter-agent communication needed). An autonomous development loop can support teams mode for inter-story parallelism. Skills load automatically in teammates.
 
 ## Key Limitations
 
@@ -100,17 +100,17 @@ Restricts lead to coordination-only (spawn, assign, synthesize). Blocks direct i
 
 **Agent Teams**: 3+ independent files, multiple review perspectives, competing approaches, large refactoring. See Test Results section below.
 
-## Benchmarking PydanticAI MAS vs CC-Style Baselines
+## Benchmarking a MAS vs CC-Style Baselines
 
-Compare MAS (Manager -> Researcher -> Analyst -> Synthesizer) against simpler patterns using same three-tier evaluation pipeline.
+Compare a multi-agent system (MAS) against simpler patterns using the same evaluation pipeline.
 
-**Baselines** (all PydanticAI within `src/`):
+**Example baselines** (all within a shared codebase):
 
-1. **PydanticAI MAS** (current): Sequential delegation with approval loop, Pydantic models, token tracking, Logfire/Phoenix observability
+1. **MAS** (e.g., Manager → Researcher → Analyst → Synthesizer): Sequential delegation with approval loop, structured data models, token tracking, observability
 2. **Single-Agent**: One agent, one pass, no delegation — tests value of multi-agent orchestration
 3. **Parallel-Agents**: Independent agents via `asyncio.gather`, coordinator merges — tests parallel vs sequential
 
-**Evaluation**: All produce `GeneratedReview` -> scored via `evaluation_pipeline.evaluate_comprehensive()`
+**Evaluation**: All produce a structured output scored via a shared evaluation pipeline.
 
 | Tier | Measures |
 | ---- | -------- |
@@ -120,11 +120,11 @@ Compare MAS (Manager -> Researcher -> Analyst -> Synthesizer) against simpler pa
 
 **Hypothesis**: Approval loop is key for Tier 2 quality. If single-agent matches, multi-agent overhead unjustified. If parallel matches at lower latency, reconsider sequential.
 
-**Key Files**: `agent_system.py`, `orchestration.py`, `evaluation_pipeline.py`, `peerread_models.py`, `config_chat.json`, `config_eval.json`
+**Key components**: agent system, orchestration layer, evaluation pipeline, data models, chat and eval configuration files.
 
 ## Tracing & Observability
 
-**Gap**: PydanticAI MAS has Logfire/Phoenix tracing; CC baselines need equivalent.
+**Gap**: A MAS with application-level tracing (e.g., Logfire/Phoenix) needs equivalent coverage for CC baselines.
 
 ### Approach Comparison
 
@@ -134,20 +134,20 @@ Compare MAS (Manager -> Researcher -> Analyst -> Synthesizer) against simpler pa
 | --------- | ----------------------------- | ---------------- | ------------------- |
 | Same Phoenix instance | Yes | Yes | No (file-based) |
 | Token/cost tracking | Yes | No | No |
-| Tool-level traces | Yes | Yes | Yes (via CCTraceAdapter) |
+| Tool-level traces | Yes | Yes | Yes (via a trace adapter parsing `raw_stream.jsonl`) |
 | LLM-call traces | Yes | No | No |
-| Trace spans | No — upstream limitation | No | Yes — via CCTraceAdapter |
+| Trace spans | No — upstream limitation | No | Yes — via artifact collection |
 | Setup complexity | Medium (Collector) | Low (script) | Low (parse files) |
 | Unified dashboard | Yes | Yes | No |
 | In settings.json | Yes (vars exist, currently disabled) | No | No |
 
-**Upstream limitation**: CC OTel exports metrics and logs only — no trace spans. This is a known limitation tracked in [anthropics/claude-code#9584](https://github.com/anthropics/claude-code/issues/9584) and [#2090](https://github.com/anthropics/claude-code/issues/2090). Until resolved, trace-level execution analysis requires artifact collection via `CCTraceAdapter`.
+**Upstream limitation**: CC OTel exports metrics and logs only — no trace spans. This is a known limitation tracked in [anthropics/claude-code#9584](https://github.com/anthropics/claude-code/issues/9584) and [#2090](https://github.com/anthropics/claude-code/issues/2090). Until resolved, trace-level execution analysis requires artifact collection: parse `raw_stream.jsonl` for `TeamCreate`, `Task`, `TodoWrite` events into structured trace data.
 
 <!-- markdownlint-enable MD013 -->
 
 ### OTel -> Phoenix (Recommended)
 
-Already partially configured in `.claude/settings.json` (currently disabled). Richest data, reuses existing Phoenix OTLP endpoint.
+Can be configured in `.claude/settings.json`. Richest data, reuses an existing Phoenix OTLP endpoint.
 
 **Full enabled config** (`settings.json` env section):
 
@@ -162,9 +162,9 @@ Already partially configured in `.claude/settings.json` (currently disabled). Ri
 }
 ```
 
-**Optional**: `OTEL_LOG_TOOL_DETAILS`: `"1"`, `OTEL_LOG_USER_PROMPTS`: `"1"`, `OTEL_RESOURCE_ATTRIBUTES`: `"project=peerread-benchmark"`, `OTEL_METRIC_EXPORT_INTERVAL`: `"10000"` (10s for testing)
+**Optional**: `OTEL_LOG_TOOL_DETAILS`: `"1"`, `OTEL_LOG_USER_PROMPTS`: `"1"`, `OTEL_RESOURCE_ATTRIBUTES`: `"project=your-project-name"`, `OTEL_METRIC_EXPORT_INTERVAL`: `"10000"` (10s for testing)
 
-**Infrastructure**: Phoenix container already accepts OTLP on `:4317` (gRPC) and `:6006` (HTTP). No additional infrastructure needed.
+**Infrastructure**: A Phoenix container accepts OTLP on `:4317` (gRPC) and `:6006` (HTTP). No additional infrastructure needed once Phoenix is running.
 
 ### Hooks -> Phoenix (Fallback)
 
@@ -176,9 +176,7 @@ Official CC integration. Turnkey setup but splits observability across two platf
 
 ### Integration Points
 
-Plugs into existing stack: `LogfireConfig` in `load_configs.py`, Logfire instrumentation in `logfire_instrumentation.py`, Phoenix Docker container via `make phoenix_start`.
-
-CC OTel is infrastructure-level (env vars + Phoenix endpoint), separate from application-level PydanticAI Logfire. Enable/disable without touching `src/app/agents/`.
+CC OTel integrates at the infrastructure level (env vars + Phoenix endpoint), separate from any application-level instrumentation (e.g., PydanticAI Logfire). It can be enabled or disabled without touching application source code.
 
 ### References
 
@@ -204,15 +202,15 @@ CC OTel is infrastructure-level (env vars + Phoenix endpoint), separate from app
 
 **Adopt now**: Parallel code reviews, multi-angle research, competing hypotheses debugging. Low-risk, high-value, clear boundaries.
 
-**Wait on**: Replacing Ralph loop or subagent architecture. Limitations (no resumption, task lag, no nested teams) make it unreliable.
+**Wait on**: Replacing an autonomous development loop or subagent architecture. Limitations (no resumption, task lag, no nested teams) make it unreliable for structured workflows.
 
 **When ready**: Enable in `settings.json`, start with review/research tasks, pre-approve common operations, use delegate mode for 3+ teammates.
 
 ### Observability Strategy for CC Evaluation
 
-- **Artifact collection is primary** for evaluation: `CCTraceAdapter` parses `raw_stream.jsonl` for `TeamCreate`, `Task`, `TodoWrite` events → `GraphTraceData` → three-tier evaluation pipeline
+- **Artifact collection is primary** for evaluation: parse `raw_stream.jsonl` for `TeamCreate`, `Task`, `TodoWrite` events into structured trace data → feed evaluation pipeline
 - **OTel is supplementary** for cost/token dashboards only (metrics + logs, no trace spans due to upstream limitation)
-- **Settings.json OTel vars** (`OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_LOGS_EXPORTER`, `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`) are currently disabled (empty string values). Enable to collect cost/token metrics in Phoenix; does not provide trace spans.
+- **`settings.json` OTel vars** (`OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_LOGS_EXPORTER`, `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`) are disabled by default (empty string values). Enable to collect cost/token metrics in Phoenix; does not provide trace spans.
 
 ## Trace & Communication Storage
 
@@ -245,7 +243,7 @@ Contains complete team orchestration metadata:
 ```json
 {
   "name": "parallel-code-review",
-  "description": "Parallel review of evaluation_pipeline.py...",
+  "description": "Parallel review of src/pipeline.py...",
   "createdAt": 1770854157287,
   "leadAgentId": "team-lead@parallel-code-review",
   "leadSessionId": "e41ee506-14e0-49c7-b933-de43cac57810",
@@ -255,12 +253,12 @@ Contains complete team orchestration metadata:
       "name": "security-reviewer",
       "agentType": "general-purpose",
       "model": "claude-opus-4-6",
-      "prompt": "MANDATORY: Read AGENTS.md first...",
+      "prompt": "MANDATORY: Read project instructions first...",
       "color": "blue",
       "planModeRequired": false,
       "joinedAt": 1770854199673,
       "tmuxPaneId": "in-process",
-      "cwd": "/workspaces/Agents-eval",
+      "cwd": "/workspaces/your-project",
       "backendType": "in-process"
     }
     // ... other members
@@ -285,16 +283,16 @@ Each agent has its own mailbox file containing all messages received:
 [
   {
     "from": "quality-reviewer",
-    "text": "## Quality Review Findings: evaluation_pipeline.py\n\n...",
-    "summary": "Quality review findings for evaluation_pipeline.py",
+    "text": "## Quality Review Findings: src/pipeline.py\n\n...",
+    "summary": "Quality review findings for src/pipeline.py",
     "timestamp": "2026-02-11T23:57:29.518Z",
     "color": "green",
     "read": true
   },
   {
     "from": "security-reviewer",
-    "text": "# Security Review: evaluation_pipeline.py\n\n...",
-    "summary": "Security review findings for evaluation_pipeline.py",
+    "text": "# Security Review: src/pipeline.py\n\n...",
+    "summary": "Security review findings for src/pipeline.py",
     "timestamp": "2026-02-11T23:57:55.822Z",
     "color": "blue",
     "read": true
@@ -325,8 +323,8 @@ Each task is tracked in its own JSON file:
 ```json
 {
   "id": "1",
-  "subject": "Security review of evaluation_pipeline.py",
-  "description": "Review src/app/evals/evaluation_pipeline.py for...",
+  "subject": "Security review of src/pipeline.py",
+  "description": "Review src/pipeline.py for...",
   "activeForm": "Reviewing security vulnerabilities",
   "owner": "security-reviewer",
   "status": "completed",
@@ -337,21 +335,20 @@ Each task is tracked in its own JSON file:
 
 **Key behaviors**: File locking prevents race conditions on task claiming. Teammates inherit lead's permissions. Context is fully isolated per teammate.
 
-### Test Results (2026-02-11)
+### Example Results
 
-3-teammate parallel code review of `evaluation_pipeline.py`:
+3-teammate parallel code review of a single source file:
 
-- **Team**: Lead (Sonnet 4.5) + security/quality/coverage reviewers (Opus 4.6 each)
-- **Execution**: ~26 seconds for 3 complete reviews (quality 23:57:29, coverage +6s, security +20s)
+- **Team**: Lead + security/quality/coverage reviewers (one model each)
+- **Execution**: ~26 seconds for 3 complete reviews (quality first, coverage +6s, security +20s)
 - **Dependencies**: Tasks 1-3 ran in parallel; task 4 (aggregation) waited for all 3
-- **Output**: Full review content preserved in mailboxes (19k+ chars each)
-- **Report**: evaluation-pipeline-parallel-review-2026-02-11.md (removed — stale review document; timing data from project test run, not external source)
+- **Output**: Full review content preserved in mailboxes
 
-### Phoenix/Logfire Correlation
+### Trace Correlation Strategy
 
-- **Application traces** (PydanticAI MAS): Phoenix OTLP endpoint (`:6006` HTTP, `:4317` gRPC), Logfire SDK, `LogfireConfig`
+- **Application traces** (MAS): Application-level tracing (e.g., Phoenix OTLP endpoint, Logfire SDK)
 - **Agent Teams traces** (CC orchestration): `~/.claude/teams/` + `~/.claude/tasks/`, file-based JSON
-- **Unified approach**: Phoenix/Logfire for application-level, CC traces for orchestration-level, aggregated findings to `docs/reviews/`, cross-reference by timestamps
+- **Unified approach**: Application-level tracing for the MAS layer, CC artifact files for the orchestration layer; cross-reference by timestamps
 
 ### Sources
 
