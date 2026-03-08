@@ -26,7 +26,7 @@ Autonomous development loops and CC teams runs are long-running interactive sess
 | **Push notifications** | No | Yes | Yes | No | No | No |
 | **E2E encryption** | TLS (Anthropic) | Yes (TweetNaCl) | No | SSH | N/A | VPN-encrypted |
 | **Multi-agent** | One per instance | Multi-session parallel | Orchestration dashboard | Persistent sessions | Parallel worktrees | Multiple tmux panes |
-| **Pricing** | Free (with CC sub) | Free | $9-20/mo | Free (infra costs) | Free (open source) | Free (infra costs) |
+| **Pricing** | Free (with CC sub) | Free | Free (previously $20/mo) | Free (infra costs) | Free (open source) | Free (infra costs) |
 | **Setup** | `claude remote-control` | `npm i -g happy-coder` | `curl install + omnara` | Docker/cloud setup | npm install | tmux + Tailscale/WireGuard |
 | **Tools supported** | CC only | CC + Codex | CC + Codex | CC + Cursor + Codex + Gemini | CC + Codex (provider-agnostic) | Any terminal tool |
 | **Open source** | No (native) | Yes (MIT) | No (archived OSS) | Yes | Yes | N/A |
@@ -49,15 +49,13 @@ Already analyzed in [CC-remote-control-analysis.md](CC-remote-control-analysis.m
 - **Security concern**: No end-to-end encryption. Conversation state and code diffs transit through Omnara servers ([source][omnara-techmonk])
 - **Voice**: Two-way voice coding mode for hands-free interaction ([source][omnara-hiretop])
 - **Localhost previews**: Preview dev server on phone without SSH tunnels ([source][omnara-appstore])
-- **Pricing**: 10 free sessions/month, $20/month unlimited. Local runs use your own Claude/Codex tokens ([source][omnara-hn])
+- **Pricing**: Now free. Previously 10 free sessions/month, $20/month unlimited ([source][omnara-hn]). Local runs use your own Claude/Codex tokens
 
 ### CloudCLI
 
-- **Open source** (7.8k GitHub stars), cloud-native dev environments ([source][cloudcli])
-- **Multi-tool**: Works with Claude Code, Cursor, Codex, Gemini ([source][cloudcli])
-- **Flow**: Start from phone/browser/Linear/Jira → continue in VS Code/Cursor over SSH ([source][cloudcli])
-- **Cloud-first**: Sessions run in cloud VMs, not local machine ([source][cloudcli])
-- **Less relevant for local-first workflows**: Sessions run in cloud VMs, not local machine — no access to local MCP servers, state files, or project config
+- **Open source** (7.8k GitHub stars), cloud or self-hosted dev environments ([source][cloudcli])
+- **Multi-tool**: Works with Claude Code, Cursor, Codex, VS Code via SSH ([source][cloudcli])
+- **Cloud-first by default**: Managed hosting or self-hosted; sessions run in VMs, not local machine ([source][cloudcli])
 
 ### Happy Coder
 

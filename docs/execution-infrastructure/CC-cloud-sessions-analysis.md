@@ -126,6 +126,13 @@ Revisit when:
 2. MCP server forwarding becomes available
 3. Baseline collection needs more parallelism than a local machine can provide
 
+## See Also
+
+For external sandbox platforms (OpenSandbox, E2B, Sprites.dev) that provide
+alternative cloud execution environments with different tradeoffs (self-hosted,
+ephemeral vs stateful, checkpoint/restore), see
+[CC-sandbox-platforms-landscape.md](CC-sandbox-platforms-landscape.md).
+
 ## References
 
 - [CC Cloud Sessions docs][cc-cloud]
