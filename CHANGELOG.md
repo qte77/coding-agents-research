@@ -13,40 +13,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `docs/CC-changelog-feature-scan.md`: add `[yyyy-MM-dd]` dates to main sections (changelog-style)
+- `CC-changelog-feature-scan.md`: add `[yyyy-MM-dd]` dates to main sections (changelog-style)
 
 ## [0.3.0] - 2026-03-12
 
 ### Added
 
-- `docs/ci-execution/CC-sandbox-platforms-landscape.md`: sandbox platforms landscape analysis
-- `docs/ci-execution/CC-version-pinning-resilience.md`: version pinning resilience research
-- `docs/configuration/CC-bash-mode-analysis.md`: bash mode analysis
-- `docs/plugins-ecosystem/CC-web-scraping-plugins-analysis.md`: web scraping plugins analysis
-- `docs/CC-changelog-feature-scan.md`: changelog feature scan (v2.1.0-2.1.71)
-- `.github/workflows/changelog-monitor.yml`: changelog monitor workflow with comparison script
+- `CC-sandbox-platforms-landscape.md`: sandbox platforms landscape analysis
+- `CC-version-pinning-resilience.md`: version pinning resilience research
+- `CC-bash-mode-analysis.md`: bash mode analysis
+- `CC-web-scraping-plugins-analysis.md`: web scraping plugins analysis
+- `CC-changelog-feature-scan.md`: changelog feature scan (v2.1.0-2.1.71)
 
 ### Changed
 
-- `docs/ci-execution/CC-remote-access-landscape.md`: updated with new findings
-- All 24 docs: added frontmatter dates (`created`, `updated`, `validated_links`)
-- All 24 docs: validated links, updated `validated_links: 2026-03-12`
-- Docs folders renamed to reflect actual content categories
+- `CC-remote-access-landscape.md`: updated with new findings
 
 ## [0.2.0] - 2026-03-08
 
 ### Added
 
-- `docs/plugins-ecosystem/CC-plugin-packaging-research.md`: Common Pitfalls section
-
-### Changed
-
-- Restructured docs into category directories: `agents-skills/`, `ci-execution/`, `configuration/`, `context-memory/`, `plugins-ecosystem/`
+- `CC-plugin-packaging-research.md`: Common Pitfalls section
 
 ## [0.1.0] - 2026-03-08
 
 ### Added
 
-- Initial 18 Claude Code feature analysis documents
-- `README.md`: project overview and navigation
-- Repository setup (LICENSE, `.gitignore`)
+- `CC-agent-teams-orchestration.md`: agent teams orchestration analysis
+- `CC-chrome-extension-analysis.md`: Chrome extension analysis
+- `CC-cli-anything-analysis.md`: CLI-anything analysis
+- `CC-cloud-sessions-analysis.md`: cloud sessions analysis
+- `CC-cowork-plugins-enterprise-analysis.md`: Cowork plugins enterprise analysis
+- `CC-extended-context-analysis.md`: extended context (1M) analysis
+- `CC-fast-mode-analysis.md`: fast mode analysis
+- `CC-github-actions-analysis.md`: GitHub Actions analysis
+- `CC-hooks-system-analysis.md`: hooks system analysis
+- `CC-llms-txt-analysis.md`: llms.txt analysis
+- `CC-memory-system-analysis.md`: memory system analysis
+- `CC-model-provider-configuration.md`: model provider configuration
+- `CC-official-plugins-landscape.md`: official plugins landscape
+- `CC-plugin-packaging-research.md`: plugin packaging research
+- `CC-ralph-enhancement-research.md`: Ralph enhancement research
+- `CC-remote-access-landscape.md`: remote access landscape
+- `CC-remote-control-analysis.md`: remote control analysis
+- `CC-sandboxing-analysis.md`: sandboxing analysis
+- `CC-skills-adoption-analysis.md`: skills adoption analysis
