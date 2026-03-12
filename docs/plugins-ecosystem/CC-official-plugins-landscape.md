@@ -4,7 +4,7 @@ source: https://www.firecrawl.dev/blog/best-claude-code-plugins, https://code.cl
 purpose: Catalog the official CC plugin ecosystem, assess coverage gaps in this research repo, and provide adoption guidance per plugin.
 created: 2026-03-12
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Reference (living catalog — update as ecosystem evolves)

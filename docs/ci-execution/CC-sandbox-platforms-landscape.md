@@ -5,7 +5,7 @@ purpose: Comparison of external sandbox platforms for AI agent code execution â€
 category: landscape
 created: 2026-03-08
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Landscape research (informational â€” not implementation requirements)

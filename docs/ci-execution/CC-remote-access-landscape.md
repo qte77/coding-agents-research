@@ -4,7 +4,7 @@ source: https://omnara.com, https://cloudcli.ai, https://happy.engineering, http
 purpose: Comparison of remote access options for monitoring and steering Claude Code sessions (autonomous loops, teams, baselines) from mobile/web.
 created: 2026-03-07
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Landscape research (informational — not implementation requirements)

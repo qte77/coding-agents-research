@@ -4,7 +4,7 @@ source: https://code.claude.com/docs/en/claude-code-on-the-web
 purpose: Analysis of Claude Code cloud execution for parallel baseline collection, remote task offloading, and CI-like autonomous runs.
 created: 2026-03-07
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Research preview

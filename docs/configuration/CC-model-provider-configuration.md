@@ -4,7 +4,7 @@ source: https://code.claude.com/docs/en/settings#environment-variables, https://
 purpose: Reference for configuring CC with alternative models, endpoints, API keys, third-party providers (OpenRouter, Bedrock, Vertex, Foundry), local models (Ollama, llama.cpp, LM Studio), and LLM gateway proxies.
 created: 2026-03-07
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Reference (actionable configuration guide)

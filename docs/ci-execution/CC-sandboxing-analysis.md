@@ -5,7 +5,7 @@ source: https://code.claude.com/docs/en/sandboxing, https://code.claude.com/docs
 category: analysis
 created: 2026-03-07
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Research (informational)

@@ -4,7 +4,7 @@ source: https://github.com/HKUDS/CLI-Anything
 purpose: Evaluate CLI-Anything as a framework for generating agent-native CLIs from existing software, and its fit relative to .gitmodules, bun scripts, and Makefile recipes.
 created: 2026-03-12
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Research (informational — monitor as ecosystem matures)

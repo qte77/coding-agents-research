@@ -4,7 +4,7 @@ source: https://code.claude.com/docs/en/setup, https://www.npmjs.com/package/@an
 purpose: Document how to pin Claude Code versions for reproducible CI/CD and container environments, self-hosted runners, cloud dev environments, and resilience against Anthropic API outages or discontinuation.
 created: 2026-03-12
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Reference (actionable configuration guide)

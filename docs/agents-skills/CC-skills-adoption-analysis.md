@@ -6,7 +6,7 @@ version: 2.0.0
 status: completed
 created: 2026-01-11
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Date**: 2026-01-11

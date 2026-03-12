@@ -5,7 +5,7 @@ source: https://llmstxt.org/, https://platform.claude.com/llms.txt, https://code
 category: analysis
 created: 2026-03-07
 updated: 2026-03-08
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Stable (spec analysis + 651-page Anthropic index + example project implementation)

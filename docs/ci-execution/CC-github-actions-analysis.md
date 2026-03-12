@@ -4,7 +4,7 @@ source: https://code.claude.com/docs/en/github-actions, https://github.com/apps/
 purpose: Evaluate Claude Code GitHub Actions for PR automation, code review, issue triage, and scheduled workflows — setup, capabilities, limitations, and cost.
 created: 2026-03-12
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Research (informational — not implementation requirements)

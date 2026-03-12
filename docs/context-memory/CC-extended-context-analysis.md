@@ -4,7 +4,7 @@ source: https://code.claude.com/docs/en/model-config#extended-context
 purpose: Analysis of 1M token extended context window for cost planning and headless CC workflow usage.
 created: 2026-03-07
 updated: 2026-03-08
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Beta (features, pricing, and availability may change)

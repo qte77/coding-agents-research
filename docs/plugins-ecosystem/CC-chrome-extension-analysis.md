@@ -4,7 +4,7 @@ source: https://claude.com/chrome
 purpose: Evaluate the Claude Chrome extension for potential relevance to CC-based workflows.
 created: 2026-03-07
 updated: 2026-03-12
-validated_links: false
+validated_links: 2026-03-12
 ---
 
 **Status**: Beta (all paid plans)
