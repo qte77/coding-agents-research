@@ -4,6 +4,8 @@ description: Analysis of the llms.txt standard, Anthropic's documentation surfac
 source: https://llmstxt.org/, https://platform.claude.com/llms.txt, https://code.claude.com/docs/llms.txt
 category: analysis
 created: 2026-03-07
+updated: 2026-03-08
+validated_links: false
 ---
 
 **Status**: Stable (spec analysis + 651-page Anthropic index + example project implementation)

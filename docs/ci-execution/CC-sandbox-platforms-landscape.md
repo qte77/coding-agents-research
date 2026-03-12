@@ -4,6 +4,8 @@ source: https://github.com/alibaba/OpenSandbox, https://e2b.dev, https://sprites
 purpose: Comparison of external sandbox platforms for AI agent code execution — self-hosted and cloud options that complement or replace CC's built-in sandboxing.
 category: landscape
 created: 2026-03-08
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Landscape research (informational — not implementation requirements)

@@ -3,6 +3,8 @@ title: CC Remote Control Analysis
 source: https://code.claude.com/docs/en/remote-control
 purpose: Analysis of Claude Code Remote Control for mobile monitoring of long-running CC sessions and cross-device session continuity.
 created: 2026-03-07
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Generally available (all plans)

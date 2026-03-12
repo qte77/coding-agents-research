@@ -3,6 +3,8 @@ title: CC GitHub Actions — claude-code-action & Claude GitHub App
 source: https://code.claude.com/docs/en/github-actions, https://github.com/apps/claude, https://github.com/anthropics/claude-code-action/discussions/578, https://dev.to/myougatheaxo/automate-your-entire-pr-workflow-with-claude-code-description-review-tests-1i41
 purpose: Evaluate Claude Code GitHub Actions for PR automation, code review, issue triage, and scheduled workflows — setup, capabilities, limitations, and cost.
 created: 2026-03-12
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Research (informational — not implementation requirements)
@@ -254,8 +256,6 @@ runs-on:
 
 [cc-gha-docs]: https://code.claude.com/docs/en/github-actions
 [claude-app]: https://github.com/apps/claude
-[cc-action-repo]: https://github.com/anthropics/claude-code-action
-[cc-action-security]: https://github.com/anthropics/claude-code-action/blob/main/docs/security.md
 [gh-discussion-578]: https://github.com/anthropics/claude-code-action/discussions/578
 [dev-to-pr]: https://dev.to/myougatheaxo/automate-your-entire-pr-workflow-with-claude-code-description-review-tests-1i41
 [gh-larger-runners]: https://docs.github.com/en/actions/concepts/runners/larger-runners

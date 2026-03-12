@@ -3,6 +3,8 @@ title: CC Changelog Feature Scan
 source: https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md, https://claudelog.com/claude-code-changelog/
 purpose: Identify actionable CC features from recent releases (v2.1.0–2.1.71) not yet covered by existing analysis docs. Applicable to any project using Claude Code.
 created: 2026-03-07
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Research (informational — feeds into adoption plan)

@@ -3,6 +3,8 @@ title: CC Version Pinning & Provider Resilience
 source: https://code.claude.com/docs/en/setup, https://www.npmjs.com/package/@anthropic-ai/claude-code, https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners, https://www.vcluster.com/blog/comparing-coder-vs-codespaces-vs-gitpod-vs-devpod
 purpose: Document how to pin Claude Code versions for reproducible CI/CD and container environments, self-hosted runners, cloud dev environments, and resilience against Anthropic API outages or discontinuation.
 created: 2026-03-12
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Reference (actionable configuration guide)
@@ -294,7 +296,7 @@ ENV DISABLE_AUTOUPDATER=1
 
 SHA256 checksums are published for each release ([source][cc-setup]):
 
-```
+```text
 https://storage.googleapis.com/claude-code-dist-.../claude-code-releases/{VERSION}/manifest.json
 ```
 

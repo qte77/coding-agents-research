@@ -3,6 +3,8 @@ title: CC Bash Mode — CLI `!` Prefix and Dynamic Context Injection in Skills/R
 source: https://code.claude.com/docs/en/interactive-mode, https://code.claude.com/docs/en/slash-commands
 purpose: Document bash mode usage in CLI interactive sessions and dynamic shell execution within skills and rules files.
 created: 2026-03-12
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Adopted (both features are stable and production-ready)

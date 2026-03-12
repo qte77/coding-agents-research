@@ -3,6 +3,8 @@ title: CC Official Plugins Landscape
 source: https://www.firecrawl.dev/blog/best-claude-code-plugins, https://code.claude.com/docs/en/plugins
 purpose: Catalog the official CC plugin ecosystem, assess coverage gaps in this research repo, and provide adoption guidance per plugin.
 created: 2026-03-12
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Reference (living catalog — update as ecosystem evolves)
@@ -20,14 +22,14 @@ The CC plugin ecosystem has grown to 9,000+ plugins across the marketplace, Clau
 | 1 | [Frontend Design](#frontend-design) | 96.4k | None | Brief section (UI-focused, skip unless frontend) |
 | 2 | [Context7](#context7) | 71.8k | None | Full section (actively used via MCP) |
 | 3 | [Code Review](#code-review) | 50k | Name-only mention | Moderate section (multi-agent scoring) |
-| 4 | [Firecrawl](#firecrawl) | — | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
-| 5 | [Playwright](#playwright) | 28.1k | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
+| 4 | Firecrawl | — | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
+| 5 | Playwright | 28.1k | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
 | 6 | [Security Guidance](#security-guidance) | 25.5k | Name-only mention | Moderate section (9 security patterns) |
-| 7 | [Chrome DevTools MCP](#chrome-devtools-mcp) | 20k | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
+| 7 | Chrome DevTools MCP | 20k | Full ([web-scraping analysis](CC-web-scraping-plugins-analysis.md)) | Cross-ref only |
 | 8 | [Figma MCP](#figma-mcp) | 18.1k | None | Brief section (design-focused, skip unless UI) |
 | 9 | [Linear](#linear) | 9.5k | None | Brief section (adopt if using Linear PM) |
-| 10 | [Ralph Loop](#ralph-loop) | — | Full ([ralph enhancement research](../agents-skills/CC-ralph-enhancement-research.md)) | Cross-ref only |
-| — | [CLI-Anything](#cli-anything) | — | Full ([CLI-Anything analysis](../agents-skills/CC-cli-anything-analysis.md)) | Cross-ref only |
+| 10 | Ralph Loop | — | Full ([ralph enhancement research](../agents-skills/CC-ralph-enhancement-research.md)) | Cross-ref only |
+| — | CLI-Anything | — | Full ([CLI-Anything analysis](../agents-skills/CC-cli-anything-analysis.md)) | Cross-ref only |
 
 <!-- markdownlint-enable MD013 -->
 

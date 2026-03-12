@@ -3,6 +3,8 @@ title: CC Cowork, Plugins & Enterprise Analysis
 source: https://claude.com/blog/cowork-plugins-across-enterprise, https://claude.com/product/cowork
 purpose: Analysis of Claude's Cowork enterprise platform, plugin architecture, and connector ecosystem for potential relevance to projects using Claude Code.
 created: 2026-03-07
+updated: 2026-03-12
+validated_links: false
 ---
 
 **Status**: Research preview (Cowork desktop app); Plugin architecture in active rollout
