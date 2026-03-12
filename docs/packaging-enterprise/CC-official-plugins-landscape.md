@@ -27,10 +27,11 @@ The CC plugin ecosystem has grown to 9,000+ plugins across the marketplace, Clau
 | 8 | [Figma MCP](#figma-mcp) | 18.1k | None | Brief section (design-focused, skip unless UI) |
 | 9 | [Linear](#linear) | 9.5k | None | Brief section (adopt if using Linear PM) |
 | 10 | [Ralph Loop](#ralph-loop) | — | Full ([ralph enhancement research](../agent-orchestration/CC-ralph-enhancement-research.md)) | Cross-ref only |
+| — | [CLI-Anything](#cli-anything) | — | Full ([CLI-Anything analysis](../agent-orchestration/CC-cli-anything-analysis.md)) | Cross-ref only |
 
 <!-- markdownlint-enable MD013 -->
 
-**Coverage summary**: 3 fully covered, 3 now documented below, 4 cross-referenced to existing analysis.
+**Coverage summary**: 3 fully covered, 3 now documented below, 5 cross-referenced to existing analysis (including CLI-Anything as a notable community plugin).
 
 ## Plugin Details
 
@@ -156,6 +157,7 @@ These plugins have full analysis elsewhere in this repo:
 - **Playwright** — [CC Web Scraping Plugins Analysis](CC-web-scraping-plugins-analysis.md)
 - **Chrome DevTools MCP** — [CC Web Scraping Plugins Analysis](CC-web-scraping-plugins-analysis.md)
 - **Ralph Loop** — [CC Ralph Enhancement Research](../agent-orchestration/CC-ralph-enhancement-research.md)
+- **CLI-Anything** (community) — [CC CLI-Anything Analysis](../agent-orchestration/CC-cli-anything-analysis.md)
 
 ## Community Resources
 
