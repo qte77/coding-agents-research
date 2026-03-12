@@ -10,6 +10,7 @@ status: completed
 
 **Date**: 2026-01-11
 **Status**: Completed
+
 ## Summary
 
 Claude Code Skills provide a modular capability pattern for projects using CC.
@@ -149,7 +150,7 @@ The Claude Code VSCode extension validates SKILL.md frontmatter against a
 
 Fields like `allowed-tools`, `model`, `context`, `agent` trigger false-positive
 warnings. This is a [known upstream bug][cc-schema-bug] (issues #23329, #25380,
-#25795 — all closed as duplicates of a tracked fix).
+\#25795 — all closed as duplicates of a tracked fix).
 
 **Workaround**: Nest CC-specific fields under `metadata:` to avoid the warning.
 This is valid per the agentskills.io spec (metadata is a free-form map) but means
@@ -184,7 +185,6 @@ Update `.claude/settings.json` to adopt Skills:
 
 [agentskills-spec]: https://agentskills.io/specification
 [cc-skills]: https://code.claude.com/docs/en/skills
-[cc-sdk-skills]: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 [gh-skills]: https://github.com/anthropics/skills/tree/main/skills
 [skills-sh]: https://skills.sh/
 [ms-skills]: https://learn.microsoft.com/en-us/agent-framework/agents/skills

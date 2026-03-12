@@ -213,6 +213,13 @@ Source: [github.com/anthropic-experimental/sandbox-runtime](https://github.com/a
 
 Enables sandboxing outside Claude Code, including MCP servers.
 
+## See Also
+
+For external sandbox platforms (OpenSandbox, E2B, Sprites.dev) that provide cloud
+execution and stronger isolation (gVisor, Firecracker microVMs) beyond CC's local
+bubblewrap/Seatbelt enforcement, see
+[CC-sandbox-platforms-landscape.md](CC-sandbox-platforms-landscape.md).
+
 ## References
 
 - [CC Sandboxing docs](https://code.claude.com/docs/en/sandboxing)

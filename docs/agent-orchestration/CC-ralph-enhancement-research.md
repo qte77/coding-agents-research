@@ -118,16 +118,16 @@ Community-published Ralph loop as a CC Skill. Uses `.claude/ralph-loop.local.md`
 
 ### Tier 2 — Improve Next Iteration (robustness)
 
-3. **Namespace `/tmp` paths by worktree**: Prevent concurrent worktree collisions
-4. **Add `--check-overlaps` to story generation script**: Warn on file conflicts without `depends_on`
-5. **Add De-Sloppify pass**: Post-story cleanup iteration — run the project's fast validation command with a "fix all lint/type/complexity issues" prompt before marking story passed
+1. **Namespace `/tmp` paths by worktree**: Prevent concurrent worktree collisions
+2. **Add `--check-overlaps` to story generation script**: Warn on file conflicts without `depends_on`
+3. **Add De-Sloppify pass**: Post-story cleanup iteration — run the project's fast validation command with a "fix all lint/type/complexity issues" prompt before marking story passed
 
 ### Tier 3 — Monitor (not yet actionable)
 
-6. **BDD workflow support**: Add `RALPH_TEST_WORKFLOW` switch when a BDD project needs Ralph
-7. **Cross-layer validation commands**: Add `/check-backend` etc. when a project becomes multi-layer
-8. **Rust/Python rewrite**: When bash brittleness measurably blocks development
-9. **`/loop` command as alternative** (v2.1.71): CC now has a built-in `/loop` command with cron scheduling for recurring prompts/commands on intervals. This overlaps with Ralph's core loop mechanic. Key differences: `/loop` is session-bound (no external state), lacks TDD enforcement, no story dependencies or PRD tracking. Could replace Ralph for simple repeating tasks but insufficient for structured multi-story workflows. Worth monitoring if `/loop` gains state persistence or hook integration.
+1. **BDD workflow support**: Add `RALPH_TEST_WORKFLOW` switch when a BDD project needs Ralph
+2. **Cross-layer validation commands**: Add `/check-backend` etc. when a project becomes multi-layer
+3. **Rust/Python rewrite**: When bash brittleness measurably blocks development
+4. **`/loop` command as alternative** (v2.1.71): CC now has a built-in `/loop` command with cron scheduling for recurring prompts/commands on intervals. This overlaps with Ralph's core loop mechanic. Key differences: `/loop` is session-bound (no external state), lacks TDD enforcement, no story dependencies or PRD tracking. Could replace Ralph for simple repeating tasks but insufficient for structured multi-story workflows. Worth monitoring if `/loop` gains state persistence or hook integration.
 
 ## References
 

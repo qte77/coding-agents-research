@@ -286,7 +286,6 @@ This is YAGNI until a second project needs these skills.
 - [Skill Development skill][skill-dev] — SKILL.md authoring best practices
 - [CC Memory docs][cc-mem] — CLAUDE.md and rules (repo-local patterns)
 
-
 [sdk-plugins]: https://platform.claude.com/docs/en/agent-sdk/plugins
 [cc-plugins]: https://code.claude.com/docs/en/plugins
 [cc-plugins-ref]: https://code.claude.com/docs/en/plugins-reference

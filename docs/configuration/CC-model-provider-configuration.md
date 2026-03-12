@@ -32,7 +32,7 @@ All variables can also be set in `settings.json` under the `env` key. ([source][
 | Variable | Purpose | Example |
 | -------- | ------- | ------- |
 | `ANTHROPIC_API_KEY` | API key (sent as `X-Api-Key` header) | `sk-ant-...` |
-| `ANTHROPIC_AUTH_TOKEN` | Custom `Authorization` header value (auto-prefixed with `Bearer `) | OpenRouter key |
+| `ANTHROPIC_AUTH_TOKEN` | Custom `Authorization` header value (auto-prefixed with `Bearer`) | OpenRouter key |
 | `ANTHROPIC_BASE_URL` | Override API endpoint | `https://openrouter.ai/api` |
 | `ANTHROPIC_CUSTOM_HEADERS` | Extra headers (newline-separated `Name: Value`) | Custom routing headers |
 
