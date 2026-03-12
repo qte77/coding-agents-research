@@ -1,6 +1,6 @@
 ---
 title: CC Version Pinning & Provider Resilience
-source: https://code.claude.com/docs/en/setup, https://www.npmjs.com/package/@anthropic-ai/claude-code, https://docs.github.com/en/actions/concepts/runners/self-hosted-runners, https://www.vcluster.com/blog/comparing-coder-vs-codespaces-vs-gitpod-vs-devpod
+source: https://code.claude.com/docs/en/setup, https://www.npmjs.com/package/@anthropic-ai/claude-code, https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners, https://www.vcluster.com/blog/comparing-coder-vs-codespaces-vs-gitpod-vs-devpod
 purpose: Document how to pin Claude Code versions for reproducible CI/CD and container environments, self-hosted runners, cloud dev environments, and resilience against Anthropic API outages or discontinuation.
 created: 2026-03-12
 ---
@@ -289,11 +289,6 @@ ENV DISABLE_AUTOUPDATER=1
 - [ ] Set `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1` if minimizing outbound calls
 - [ ] Configure log forwarding for CC command audit trails
 - [ ] Set resource limits (memory, CPU) appropriate for CC workloads
-
-### Community Tools
-
-- **[claude-code-runner](https://github.com/anthropics/claude-code)** — self-hosted HTTP task runner for CC; wraps `claude -p` behind an API endpoint
-- **[ClaudeBox](https://github.com/anthropics/claude-code)** — Docker-based dev environment for isolated CC execution
 
 ## Binary Integrity Verification
 

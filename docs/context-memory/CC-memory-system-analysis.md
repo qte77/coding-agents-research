@@ -209,47 +209,18 @@ Auto memory files are plain markdown — edit or delete at any time. Run `/memor
 - **`InstructionsLoaded` hook**: Log exactly which instruction files load, when, and why — useful for debugging path-specific rules ([source][cc-mem])
 - **First-time trust**: CC shows approval dialog for external `@` imports on first encounter in a project ([source][cc-mem])
 
-## Example Project Usage
-
-A well-structured project might use both systems as follows:
-
-### CLAUDE.md Structure
-
-The filenames below are examples — projects use different names for these concerns:
-
-```text
-CLAUDE.md              → @AGENTS.md import (or equivalent entry point)
-AGENTS.md              → Behavioral rules, compliance, decision framework
-                          (example name; use any name that fits your project)
-CONTRIBUTING.md        → Technical workflows, coding standards
-ESCALATION.md          → Escalation protocol
-                          (example: "AGENT_REQUESTS.md" in some projects)
-LEARNINGS.md           → Accumulated pattern knowledge
-                          (example: "AGENT_LEARNINGS.md" in some projects)
-.claude/rules/
-├── context-management.md  → Context window principles
-└── core-principles.md     → KISS/DRY/YAGNI mandatory principles
-```
-
-### Auto Memory
-
-Active at `~/.claude/projects/<project-path>/memory/`. Contains `MEMORY.md` index and topic files accumulated across sessions.
-
 ## Usage Considerations
 
 <!-- markdownlint-disable MD013 -->
 
 | Aspect | Notes | Optimization Opportunity |
 | ------ | ----- | ------------------------ |
-| CLAUDE.md size | Keep under 200 lines per file for best adherence | Consider splitting large sections into `.claude/rules/` files with path scoping |
-| Import chain | CLAUDE.md → supporting docs via `@` imports | Deep chains increase token cost; audit total imported size |
-| Path-scoped rules | Rules without `paths` frontmatter load unconditionally | Add path-scoped rules for specific directories (e.g., agent code, tests) to reduce noise |
-| Auto memory | Accumulates learnings across sessions | Periodically cross-check with manually maintained learnings docs for duplicates or contradictions |
 | Autonomous loop context | Each iteration starts fresh; reads CLAUDE.md + auto memory | Working as designed — see context rot analysis for headless invocation patterns |
 | Cloud sessions | Auto memory is machine-local | Cloud sessions rely on committed CLAUDE.md only (see CC-cloud-sessions-analysis.md) |
-| Managed policy | `/etc/claude-code/CLAUDE.md` | Use for org-wide CC standards when deploying across a team |
 
 <!-- markdownlint-enable MD013 -->
+
+For CLAUDE.md size, import chains, path-scoped rules, auto memory deduplication, `claudeMdExcludes`, and managed policy details, see the expanded sections above.
 
 ### Decision Rule
 
