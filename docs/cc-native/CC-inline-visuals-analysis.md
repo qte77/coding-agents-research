@@ -9,6 +9,8 @@ validated_links: 2026-03-13
 
 **Status**: Beta (March 12, 2026) — all plans including free tier
 
+**Scope**: Claude.ai web + desktop app feature (server-side). Not a Claude Code CLI feature — no CC version required. Tracked here because it's an Anthropic platform capability relevant to CC research context.
+
 ## What Inline Visuals Are
 
 Claude can create custom charts, diagrams, and interactive visualizations inline in its responses ([source][blog]). Anthropic describes it as giving Claude "its own whiteboard" — visual aids built from scratch for each conversation, not image generation ([source][engadget]).
