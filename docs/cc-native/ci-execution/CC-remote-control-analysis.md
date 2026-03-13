@@ -36,6 +36,8 @@ claude remote-control --sandbox  # Enable filesystem/network sandboxing
 
 Press spacebar to show QR code for quick phone access. Session URL is displayed for browser access.
 
+To download the Claude mobile app, use the `/mobile` slash command inside Claude Code — it displays a QR code for iOS/Android ([source][cc-rc-guide]).
+
 ### Connecting from Another Device
 
 1. Open session URL directly in browser
@@ -113,6 +115,7 @@ loop_remote:
 - [CC Security][cc-sec]
 
 [cc-rc]: https://code.claude.com/docs/en/remote-control
+[cc-rc-guide]: https://claudefa.st/blog/guide/development/remote-control-guide "Claude Code Remote Control: Complete Setup Guide"
 [cc-web]: https://code.claude.com/docs/en/claude-code-on-the-web
 [cc-cli]: https://code.claude.com/docs/en/cli-reference
 [cc-sec]: https://code.claude.com/docs/en/security
