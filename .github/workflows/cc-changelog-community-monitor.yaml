@@ -25,6 +25,10 @@ jobs:
 
       - name: Run community monitor
         id: monitor
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
         run: |
           set +e
           python .github/scripts/community-monitor.py \

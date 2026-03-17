@@ -21,6 +21,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from lib.monitor_utils import extract_keywords
+
 
 # ---------------------------------------------------------------------------
 # Parsing helpers
@@ -139,11 +142,6 @@ def collect_doc_index(docs_dir: Path) -> dict[str, list[str]]:
 # ---------------------------------------------------------------------------
 # Coverage checking
 # ---------------------------------------------------------------------------
-
-def extract_keywords(text: str, min_len: int = 4) -> set[str]:
-    """Extract lowercase alphanumeric tokens of at least ``min_len`` chars."""
-    return {w.lower() for w in re.findall(r"[A-Za-z0-9_/-]{%d,}" % min_len, text)}
-
 
 def find_covering_docs(
     feature_line: str, doc_index: dict[str, list[str]]
