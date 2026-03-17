@@ -33,7 +33,7 @@ when to use it, and when to skip it.
 
 ### Other
 
-| [`examples/`](examples/) | Settings, statusline, rules, and user preferences |
+| [`examples/`](docs/cc-native/examples/) | Settings, statusline, rules, and user preferences |
 
 ## Structure
 

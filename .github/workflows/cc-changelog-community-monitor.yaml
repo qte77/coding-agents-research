@@ -51,7 +51,7 @@ jobs:
         uses: ./.github/actions/create-triage-pr
         with:
           branch-prefix: chore/community-triage
-          report-dest: docs/community/community-triage
+          report-dest: docs/community/triage/community-triage
           extra-files: .github/state/community-monitor-state.json
           pr-title-prefix: 'chore: community triage'
           pr-body-header: 'Community Monitor: New Uncovered Content Detected'

@@ -78,7 +78,7 @@ jobs:
         uses: ./.github/actions/create-triage-pr
         with:
           branch-prefix: chore/changelog-triage
-          report-dest: docs/cc-native/changelog-triage
+          report-dest: docs/cc-native/triage/changelog-triage
           extra-files: >-
             docs/cc-native/CC-changelog-feature-scan.md
             .github/state/native-monitor-state.json
