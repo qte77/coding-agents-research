@@ -26,9 +26,6 @@
     "network": {
       "allowLocalBinding": true,
       "allowedHosts": ["api.github.com", "raw.githubusercontent.com"]
-    },
-    "filesystem": {
-      "allowWrite": ["/workspaces"]
     }
   },
   "permissions": {
