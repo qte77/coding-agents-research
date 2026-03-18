@@ -129,7 +129,7 @@ Generated from the archive as `data/outage-stats.md`, covering:
 - **`repository_dispatch`** (`status-change` event) — retained for future webhook proxy
 - **`workflow_dispatch`** — manual trigger for testing
 
-Changes are committed directly to `main` (append-only factual data, not content requiring triage).
+Changes are submitted via PR using the `create-triage-pr` composite action (branch protection requires PRs and signed commits on `main`).
 
 ## Design Decisions
 
@@ -137,9 +137,9 @@ Changes are committed directly to `main` (append-only factual data, not content 
 |----------|-----------|
 | JSONL, not database | Git-native, diffable, appendable, zero dependencies |
 | Stdlib-only scripts | Consistent with existing monitors (no pandas/numpy) |
-| Direct commit, not triage PR | Factual data, not content decisions — always current |
+| PR via composite action | Branch protection blocks direct push to `main` |
 | Upsert by incident ID | Handles new incidents and resolution updates idempotently |
-| Daily cron + optional webhook | Cron is reliable baseline; webhook is enhancement |
+| 4-hour cron, no webhook | Webhook needs proxy; cron catches everything with zero infra |
 | `data/` directory | Separate machine-generated data from research documents |
 
 ## Adoption Decision
