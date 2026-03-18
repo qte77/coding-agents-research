@@ -85,7 +85,7 @@ To connect Statuspage webhooks to GitHub Actions:
 
 3. **PAT requirements** — Fine-grained token with `contents: write` on the target repo, stored as a secret in the proxy service
 
-**Recommendation**: Start with daily cron only. The JSON API returns full incident history, so nothing is missed. Add webhook proxy later if sub-day latency matters.
+**Decision**: Use 4-hour cron polling instead of webhook. The JSON API returns full incident history, so nothing is missed. A webhook proxy adds infrastructure complexity for marginal latency gain. See [Statuspage webhook docs](https://support.atlassian.com/statuspage/docs/enable-webhook-notifications/) and [GitHub repository_dispatch docs](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#repository_dispatch) for the format incompatibility.
 
 ## API Error Correlation
 
@@ -125,8 +125,8 @@ Generated from the archive as `data/outage-stats.md`, covering:
 ### Workflow
 
 `cc-status-monitor.yaml` runs on:
-- **Daily cron** (08:00 UTC) — baseline collection, catches everything
-- **`repository_dispatch`** (`status-change` event) — webhook-driven, near-real-time
+- **4-hour cron** — primary collection mechanism, catches everything
+- **`repository_dispatch`** (`status-change` event) — retained for future webhook proxy
 - **`workflow_dispatch`** — manual trigger for testing
 
 Changes are committed directly to `main` (append-only factual data, not content requiring triage).

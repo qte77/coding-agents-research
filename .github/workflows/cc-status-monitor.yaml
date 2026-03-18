@@ -2,10 +2,17 @@ name: Status Monitor
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Daily 08:00 UTC (backup collector)
+    - cron: '0 */4 * * *'  # Every 4 hours — replaces webhook for near-real-time collection.
+    # Reason: Statuspage webhooks use a proprietary payload format incompatible
+    # with GitHub repository_dispatch (which requires {"event_type": "...",
+    # "client_payload": {...}} + auth header). A proxy (e.g. Cloudflare Worker)
+    # would be needed to transform the payload. Frequent cron polling achieves
+    # the same result with zero additional infrastructure.
+    # See: https://support.atlassian.com/statuspage/docs/enable-webhook-notifications/
+    # See: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#repository_dispatch
   workflow_dispatch:
   repository_dispatch:
-    types: [status-change]  # Statuspage webhook
+    types: [status-change]  # Retained for future webhook proxy integration
 
 permissions:
   contents: write
