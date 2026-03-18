@@ -80,7 +80,7 @@ To connect Statuspage webhooks to GitHub Actions:
 2. **Proxy required** — A lightweight intermediary (Cloudflare Worker, AWS Lambda, or GitHub App) that:
    - Receives Statuspage webhook POST
    - Wraps the payload: `{"event_type": "status-change", "client_payload": <original>}`
-   - POSTs to `https://api.github.com/repos/qte77/claude-code-research/dispatches`
+   - POSTs to `https://api.github.com/repos/qte77/coding-agents-research/dispatches`
    - Authenticates with a PAT (stored as proxy secret)
 
 3. **PAT requirements** — Fine-grained token with `contents: write` on the target repo, stored as a secret in the proxy service
