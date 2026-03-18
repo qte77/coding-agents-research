@@ -35,7 +35,7 @@ when to use it, and when to skip it.
 
 | Directory | Contents |
 |---|---|
-| [`status-monitor/`](triage/status-monitor/) | Outage archive (`outages.jsonl`), auto-generated stats, timestamped status reports |
+| [`status-monitor/`](triage/status-monitor/) | Outage archive (`outages.jsonl`) and auto-generated statistics (`outage-stats.md`) |
 | [`cc-changelog/`](triage/cc-changelog/) | Timestamped CC changelog triage reports |
 | [`community/`](triage/community/) | Timestamped community monitor triage reports |
 

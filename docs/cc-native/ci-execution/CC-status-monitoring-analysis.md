@@ -129,7 +129,7 @@ Generated from the archive as `triage/status-monitor/outage-stats.md`, covering:
 - **`repository_dispatch`** (`status-change` event) — retained for future webhook proxy
 - **`workflow_dispatch`** — manual trigger for testing
 
-Changes are submitted via PR using the `create-triage-pr` composite action (branch protection requires PRs and signed commits on `main`).
+Changes are committed directly to `main` by the workflow bot (append-only factual data, no human triage needed).
 
 ## Design Decisions
 
@@ -137,7 +137,7 @@ Changes are submitted via PR using the `create-triage-pr` composite action (bran
 |----------|-----------|
 | JSONL, not database | Git-native, diffable, appendable, zero dependencies |
 | Stdlib-only scripts | Consistent with existing monitors (no pandas/numpy) |
-| PR via composite action | Branch protection blocks direct push to `main` |
+| Direct commit to `main` | Append-only factual data, no human triage needed |
 | Upsert by incident ID | Handles new incidents and resolution updates idempotently |
 | 4-hour cron, no webhook | Webhook needs proxy; cron catches everything with zero infra |
 | `triage/` directory | Consolidates all monitor outputs under a single root |
