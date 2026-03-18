@@ -5,7 +5,7 @@ Reads the outage archive and produces a markdown report with frequency,
 duration, severity, component, and time-of-day analysis.
 
 Usage:
-    python status-stats.py --archive data/outages.jsonl > data/outage-stats.md
+    python status-stats.py --archive triage/status-monitor/outages.jsonl > triage/status-monitor/outage-stats.md
 
 All calculations use stdlib only (no pandas/numpy).
 """
@@ -292,8 +292,8 @@ def main() -> None:
         description="Generate outage statistics from JSONL archive."
     )
     parser.add_argument(
-        "--archive", type=Path, default=Path("data/outages.jsonl"),
-        help="Path to the JSONL archive file (default: data/outages.jsonl)",
+        "--archive", type=Path, default=Path("triage/status-monitor/outages.jsonl"),
+        help="Path to the JSONL archive file (default: triage/status-monitor/outages.jsonl)",
     )
     args = parser.parse_args()
 

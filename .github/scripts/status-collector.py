@@ -7,10 +7,10 @@ from repository_dispatch events.
 
 Usage:
     # Fetch from API (daily cron)
-    python status-collector.py --archive data/outages.jsonl
+    python status-collector.py --archive triage/status-monitor/outages.jsonl
 
     # Process webhook payload (repository_dispatch)
-    python status-collector.py --archive data/outages.jsonl --webhook-payload /tmp/payload.json
+    python status-collector.py --archive triage/status-monitor/outages.jsonl --webhook-payload /tmp/payload.json
 
 Exit codes:
     0 = no new or updated incidents
@@ -129,8 +129,8 @@ def main() -> None:
         description="Collect Claude platform incidents into JSONL archive."
     )
     parser.add_argument(
-        "--archive", type=Path, default=Path("data/outages.jsonl"),
-        help="Path to the JSONL archive file (default: data/outages.jsonl)",
+        "--archive", type=Path, default=Path("triage/status-monitor/outages.jsonl"),
+        help="Path to the JSONL archive file (default: triage/status-monitor/outages.jsonl)",
     )
     parser.add_argument(
         "--statuspage-base", default=STATUSPAGE_BASE,

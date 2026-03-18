@@ -31,12 +31,13 @@ when to use it, and when to skip it.
 | [`CC-community-tooling-landscape.md`](docs/community/CC-community-tooling-landscape.md) | Developer tooling: RTK (Rust Token Killer) context compression |
 | [`CC-domain-claudemd-showcase.md`](docs/community/CC-domain-claudemd-showcase.md) | Domain-specific CLAUDE.md patterns: genome analysis pipeline |
 
-### Data (`data/`)
+### Triage (`triage/`)
 
-| File | Description |
+| Directory | Contents |
 |---|---|
-| [`outages.jsonl`](data/outages.jsonl) | JSONL archive of all Claude platform incidents (auto-updated daily) |
-| [`outage-stats.md`](data/outage-stats.md) | Auto-generated statistical analysis of outage patterns |
+| [`status-monitor/`](triage/status-monitor/) | Outage archive (`outages.jsonl`), auto-generated stats, timestamped status reports |
+| [`cc-changelog/`](triage/cc-changelog/) | Timestamped CC changelog triage reports |
+| [`community/`](triage/community/) | Timestamped community monitor triage reports |
 
 ### Other
 

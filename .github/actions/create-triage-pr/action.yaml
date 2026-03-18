@@ -6,7 +6,7 @@ inputs:
     description: 'Branch name prefix (e.g., chore/changelog-triage)'
     required: true
   report-dest:
-    description: 'Destination path for the report file (e.g., docs/cc-native/changelog-triage)'
+    description: 'Destination path for the report file (e.g., triage/cc-changelog/changelog-triage)'
     required: true
   extra-files:
     description: 'Space-separated extra files to stage'
@@ -38,9 +38,13 @@ runs:
 
         git checkout -b "$BRANCH"
 
-        cp /tmp/report.md "${{ inputs.report-dest }}-${DATE_STAMP}.md"
+        DEST_DIR=$(dirname "${{ inputs.report-dest }}")
+        DEST_BASE=$(basename "${{ inputs.report-dest }}")
+        REPORT_PATH="${DEST_DIR}/${DATE_STAMP}-${DEST_BASE}.md"
 
-        git add "${{ inputs.report-dest }}-${DATE_STAMP}.md"
+        cp /tmp/report.md "$REPORT_PATH"
+
+        git add "$REPORT_PATH"
         for f in ${{ inputs.extra-files }}; do
           git add "$f"
         done
