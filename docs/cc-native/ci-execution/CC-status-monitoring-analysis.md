@@ -103,7 +103,7 @@ The outage archive enables retrospective correlation: match incident timestamps 
 
 ### Archive Format
 
-JSONL file (`data/outages.jsonl`) with one normalized record per line, sorted by `started_at`:
+JSONL file (`triage/status-monitor/outages.jsonl`) with one normalized record per line, sorted by `started_at`:
 
 ```json
 {"id":"abc123","name":"Elevated errors","status":"resolved","impact":"major","started_at":"2026-03-17T14:07:00Z","resolved_at":"2026-03-17T15:45:00Z","duration_minutes":98,"affected_components":["Claude API"],"updates_count":4,"url":"https://stspg.io/abc123","collected_at":"2026-03-17T16:00:00Z"}
@@ -113,7 +113,7 @@ JSONL file (`data/outages.jsonl`) with one normalized record per line, sorted by
 
 ### Statistical Analysis
 
-Generated from the archive as `data/outage-stats.md`, covering:
+Generated from the archive as `triage/status-monitor/outage-stats.md`, covering:
 
 - **Frequency**: incidents per week/month, trend over time
 - **Duration**: min/max/median/mean resolution time (MTTR)
@@ -140,7 +140,7 @@ Changes are submitted via PR using the `create-triage-pr` composite action (bran
 | PR via composite action | Branch protection blocks direct push to `main` |
 | Upsert by incident ID | Handles new incidents and resolution updates idempotently |
 | 4-hour cron, no webhook | Webhook needs proxy; cron catches everything with zero infra |
-| `data/` directory | Separate machine-generated data from research documents |
+| `triage/` directory | Consolidates all monitor outputs under a single root |
 
 ## Adoption Decision
 
