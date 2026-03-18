@@ -72,20 +72,8 @@ def format_duration(minutes: float) -> str:
     return f"{days:.1f}d"
 
 
-def generate_report(records: list[dict]) -> str:
-    """Generate a markdown statistical report from outage records."""
-    lines: list[str] = []
-    lines.append("# Claude Platform Outage Statistics")
-    lines.append("")
-    lines.append(f"*Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')} "
-                 f"| {len(records)} incidents in archive*")
-    lines.append("")
-
-    if not records:
-        lines.append("No incidents recorded yet.")
-        return "\n".join(lines)
-
-    # Parse dates
+def _extract_timing(records: list[dict]) -> tuple[list[dict], list[datetime], list[int]]:
+    """Extract resolved records, start times, and durations from records."""
     resolved = []
     all_starts: list[datetime] = []
     durations: list[int] = []
@@ -97,68 +85,81 @@ def generate_report(records: list[dict]) -> str:
         if dur is not None and isinstance(dur, (int, float)):
             durations.append(int(dur))
             resolved.append(r)
+    return resolved, all_starts, durations
 
-    # --- Summary ---
-    lines.append("## Summary")
-    lines.append("")
+
+def _section_summary(
+    records: list[dict], resolved: list[dict], all_starts: list[datetime],
+) -> list[str]:
+    """Build the Summary section."""
+    lines = ["## Summary", ""]
     unresolved = sum(1 for r in records if r.get("status") != "resolved")
     lines.append(f"- **Total incidents**: {len(records)}")
     lines.append(f"- **Resolved**: {len(resolved)}")
     lines.append(f"- **Unresolved/ongoing**: {unresolved}")
     if all_starts:
-        earliest = min(all_starts)
-        latest = max(all_starts)
-        lines.append(f"- **Date range**: {earliest.strftime('%Y-%m-%d')} to {latest.strftime('%Y-%m-%d')}")
+        earliest, latest = min(all_starts), max(all_starts)
         span_days = max(1, (latest - earliest).days)
+        lines.append(f"- **Date range**: {earliest.strftime('%Y-%m-%d')} to {latest.strftime('%Y-%m-%d')}")
         lines.append(f"- **Span**: {span_days} days")
         lines.append(f"- **Rate**: {len(records) / (span_days / 7):.1f} incidents/week")
     lines.append("")
+    return lines
 
-    # --- Duration Analysis ---
-    if durations:
-        lines.append("## Resolution Time")
-        lines.append("")
-        lines.append(f"| Metric | Value |")
-        lines.append(f"|--------|-------|")
-        lines.append(f"| Min | {format_duration(min(durations))} |")
-        lines.append(f"| Max | {format_duration(max(durations))} |")
-        lines.append(f"| Median | {format_duration(median(durations))} |")
-        lines.append(f"| Mean | {format_duration(mean(durations))} |")
-        lines.append(f"| Total downtime | {format_duration(sum(durations))} |")
-        lines.append("")
 
-    # --- Severity Distribution ---
+def _section_resolution_time(durations: list[int]) -> list[str]:
+    """Build the Resolution Time section."""
+    if not durations:
+        return []
+    return [
+        "## Resolution Time", "",
+        "| Metric | Value |", "|--------|-------|",
+        f"| Min | {format_duration(min(durations))} |",
+        f"| Max | {format_duration(max(durations))} |",
+        f"| Median | {format_duration(median(durations))} |",
+        f"| Mean | {format_duration(mean(durations))} |",
+        f"| Total downtime | {format_duration(sum(durations))} |",
+        "",
+    ]
+
+
+def _section_severity(records: list[dict]) -> list[str]:
+    """Build the Severity Distribution section."""
     impact_counts = Counter(r.get("impact", "unknown") for r in records)
-    lines.append("## Severity Distribution")
-    lines.append("")
-    lines.append("| Impact | Count | % |")
-    lines.append("|--------|-------|---|")
+    lines = ["## Severity Distribution", "", "| Impact | Count | % |", "|--------|-------|---|"]
     for impact, count in impact_counts.most_common():
         pct = count / len(records) * 100
         lines.append(f"| {impact} | {count} | {pct:.0f}% |")
     lines.append("")
+    return lines
 
-    # --- MTTR by Severity ---
-    if durations:
-        severity_durations: dict[str, list[int]] = defaultdict(list)
-        for r in resolved:
-            dur = r.get("duration_minutes")
-            if dur is not None:
-                severity_durations[r.get("impact", "unknown")].append(int(dur))
 
-        lines.append("## MTTR by Severity")
-        lines.append("")
-        lines.append("| Impact | MTTR (mean) | MTTR (median) | Count |")
-        lines.append("|--------|-------------|---------------|-------|")
-        for impact in sorted(severity_durations.keys()):
-            durs = severity_durations[impact]
-            lines.append(
-                f"| {impact} | {format_duration(mean(durs))} "
-                f"| {format_duration(median(durs))} | {len(durs)} |"
-            )
-        lines.append("")
+def _section_mttr(resolved: list[dict]) -> list[str]:
+    """Build the MTTR by Severity section."""
+    severity_durations: dict[str, list[int]] = defaultdict(list)
+    for r in resolved:
+        dur = r.get("duration_minutes")
+        if dur is not None:
+            severity_durations[r.get("impact", "unknown")].append(int(dur))
+    if not severity_durations:
+        return []
+    lines = ["## MTTR by Severity", "",
+             "| Impact | MTTR (mean) | MTTR (median) | Count |",
+             "|--------|-------------|---------------|-------|"]
+    for impact in sorted(severity_durations.keys()):
+        durs = severity_durations[impact]
+        lines.append(
+            f"| {impact} | {format_duration(mean(durs))} "
+            f"| {format_duration(median(durs))} | {len(durs)} |"
+        )
+    lines.append("")
+    return lines
 
-    # --- Component Heatmap ---
+
+def _build_component_data(
+    records: list[dict],
+) -> tuple[Counter[str], dict[str, list[int]]]:
+    """Aggregate component incident counts and durations."""
     comp_counts: Counter[str] = Counter()
     comp_durations: dict[str, list[int]] = defaultdict(list)
     for r in records:
@@ -167,86 +168,120 @@ def generate_report(records: list[dict]) -> str:
             comp_counts[comp] += 1
             if dur is not None:
                 comp_durations[comp].append(int(dur))
+    return comp_counts, comp_durations
 
-    if comp_counts:
-        lines.append("## Component Frequency")
-        lines.append("")
-        lines.append("| Component | Incidents | Total Downtime | Avg Duration |")
-        lines.append("|-----------|-----------|----------------|--------------|")
-        for comp, count in comp_counts.most_common():
-            durs = comp_durations.get(comp, [])
-            total = format_duration(sum(durs)) if durs else "—"
-            avg = format_duration(mean(durs)) if durs else "—"
-            lines.append(f"| {comp} | {count} | {total} | {avg} |")
-        lines.append("")
 
-    # --- Time-of-Day Distribution ---
-    if all_starts:
-        hour_counts = Counter(dt.hour for dt in all_starts)
-        lines.append("## Time-of-Day Distribution (UTC)")
-        lines.append("")
-        lines.append("| Hour | Incidents | Bar |")
-        lines.append("|------|-----------|-----|")
-        max_count = max(hour_counts.values()) if hour_counts else 1
-        for hour in range(24):
-            count = hour_counts.get(hour, 0)
-            bar = "#" * int(count / max_count * 20) if count > 0 else ""
-            lines.append(f"| {hour:02d}:00 | {count} | {bar} |")
-        lines.append("")
+def _section_components(
+    comp_counts: Counter[str], comp_durations: dict[str, list[int]],
+) -> list[str]:
+    """Build the Component Frequency section."""
+    if not comp_counts:
+        return []
+    lines = ["## Component Frequency", "",
+             "| Component | Incidents | Total Downtime | Avg Duration |",
+             "|-----------|-----------|----------------|--------------|"]
+    for comp, count in comp_counts.most_common():
+        durs = comp_durations.get(comp, [])
+        total = format_duration(sum(durs)) if durs else "—"
+        avg = format_duration(mean(durs)) if durs else "—"
+        lines.append(f"| {comp} | {count} | {total} | {avg} |")
+    lines.append("")
+    return lines
 
-    # --- Day-of-Week Distribution ---
-    if all_starts:
-        dow_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        dow_counts = Counter(dt.weekday() for dt in all_starts)
-        lines.append("## Day-of-Week Distribution")
-        lines.append("")
-        lines.append("| Day | Incidents | Bar |")
-        lines.append("|-----|-----------|-----|")
-        max_dow = max(dow_counts.values()) if dow_counts else 1
-        for day_idx, day_name in enumerate(dow_names):
-            count = dow_counts.get(day_idx, 0)
-            bar = "#" * int(count / max_dow * 20) if count > 0 else ""
-            lines.append(f"| {day_name} | {count} | {bar} |")
-        lines.append("")
 
-    # --- Monthly Trend ---
-    if all_starts:
-        month_counts: Counter[str] = Counter()
-        for dt in all_starts:
-            month_counts[dt.strftime("%Y-%m")] += 1
+def _section_time_distributions(all_starts: list[datetime]) -> list[str]:
+    """Build Time-of-Day, Day-of-Week, and Monthly Trend sections."""
+    if not all_starts:
+        return []
+    lines: list[str] = []
 
-        lines.append("## Monthly Trend")
-        lines.append("")
-        lines.append("| Month | Incidents | Bar |")
-        lines.append("|-------|-----------|-----|")
-        max_month = max(month_counts.values()) if month_counts else 1
-        for month in sorted(month_counts.keys()):
-            count = month_counts[month]
-            bar = "#" * int(count / max_month * 20) if count > 0 else ""
-            lines.append(f"| {month} | {count} | {bar} |")
-        lines.append("")
+    # Time-of-Day
+    hour_counts = Counter(dt.hour for dt in all_starts)
+    max_hour = max(hour_counts.values())
+    lines += ["## Time-of-Day Distribution (UTC)", "",
+              "| Hour | Incidents | Bar |", "|------|-----------|-----|"]
+    for hour in range(24):
+        count = hour_counts.get(hour, 0)
+        bar = "#" * int(count / max_hour * 20) if count > 0 else ""
+        lines.append(f"| {hour:02d}:00 | {count} | {bar} |")
+    lines.append("")
 
-    # --- Uptime Estimate ---
-    if all_starts and durations:
-        span_minutes = max(1, (max(all_starts) - min(all_starts)).total_seconds() / 60)
-        total_down = sum(durations)
-        uptime_pct = (1 - total_down / span_minutes) * 100
-        lines.append("## Uptime Estimate")
-        lines.append("")
-        lines.append(f"- **Overall uptime**: {uptime_pct:.3f}%")
-        lines.append(f"- **Total downtime**: {format_duration(total_down)}")
-        lines.append(f"- **Measurement period**: {format_duration(span_minutes)}")
-        lines.append("")
+    # Day-of-Week
+    dow_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    dow_counts = Counter(dt.weekday() for dt in all_starts)
+    max_dow = max(dow_counts.values())
+    lines += ["## Day-of-Week Distribution", "",
+              "| Day | Incidents | Bar |", "|-----|-----------|-----|"]
+    for day_idx, day_name in enumerate(dow_names):
+        count = dow_counts.get(day_idx, 0)
+        bar = "#" * int(count / max_dow * 20) if count > 0 else ""
+        lines.append(f"| {day_name} | {count} | {bar} |")
+    lines.append("")
 
-        # Per-component uptime
-        if comp_durations:
-            lines.append("| Component | Uptime % | Downtime |")
-            lines.append("|-----------|----------|----------|")
-            for comp, durs in sorted(comp_durations.items(), key=lambda x: -sum(x[1])):
-                comp_down = sum(durs)
-                comp_up = (1 - comp_down / span_minutes) * 100
-                lines.append(f"| {comp} | {comp_up:.3f}% | {format_duration(comp_down)} |")
-            lines.append("")
+    # Monthly Trend
+    month_counts: Counter[str] = Counter(dt.strftime("%Y-%m") for dt in all_starts)
+    max_month = max(month_counts.values())
+    lines += ["## Monthly Trend", "",
+              "| Month | Incidents | Bar |", "|-------|-----------|-----|"]
+    for month in sorted(month_counts.keys()):
+        count = month_counts[month]
+        bar = "#" * int(count / max_month * 20) if count > 0 else ""
+        lines.append(f"| {month} | {count} | {bar} |")
+    lines.append("")
+
+    return lines
+
+
+def _section_uptime(
+    all_starts: list[datetime], durations: list[int],
+    comp_durations: dict[str, list[int]],
+) -> list[str]:
+    """Build the Uptime Estimate section."""
+    if not all_starts or not durations:
+        return []
+    span_minutes = max(1, (max(all_starts) - min(all_starts)).total_seconds() / 60)
+    total_down = sum(durations)
+    uptime_pct = (1 - total_down / span_minutes) * 100
+    lines = [
+        "## Uptime Estimate", "",
+        f"- **Overall uptime**: {uptime_pct:.3f}%",
+        f"- **Total downtime**: {format_duration(total_down)}",
+        f"- **Measurement period**: {format_duration(span_minutes)}",
+        "",
+    ]
+    if comp_durations:
+        lines += ["| Component | Uptime % | Downtime |",
+                   "|-----------|----------|----------|"]
+        for comp, durs in sorted(comp_durations.items(), key=lambda x: -sum(x[1])):
+            comp_down = sum(durs)
+            comp_up = (1 - comp_down / span_minutes) * 100
+            lines.append(f"| {comp} | {comp_up:.3f}% | {format_duration(comp_down)} |")
+        lines.append("")
+    return lines
+
+
+def generate_report(records: list[dict]) -> str:
+    """Generate a markdown statistical report from outage records."""
+    lines: list[str] = [
+        "# Claude Platform Outage Statistics", "",
+        f"*Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')} "
+        f"| {len(records)} incidents in archive*", "",
+    ]
+
+    if not records:
+        lines.append("No incidents recorded yet.")
+        return "\n".join(lines)
+
+    resolved, all_starts, durations = _extract_timing(records)
+    comp_counts, comp_durations = _build_component_data(records)
+
+    lines += _section_summary(records, resolved, all_starts)
+    lines += _section_resolution_time(durations)
+    lines += _section_severity(records)
+    lines += _section_mttr(resolved)
+    lines += _section_components(comp_counts, comp_durations)
+    lines += _section_time_distributions(all_starts)
+    lines += _section_uptime(all_starts, durations, comp_durations)
 
     return "\n".join(lines)
 
