@@ -7,6 +7,8 @@ sources:
   - https://claude.com/docs/connectors/google/gmail
   - https://claude.com/docs/connectors/google/drive
   - https://claude.com/docs/connectors/google/calendar
+  - https://code.claude.com/docs/en/mcp
+  - https://code.claude.com/docs/en/changelog
 ---
 
 # Claude Connectors Overview
@@ -45,7 +47,24 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 | Claude Code | Yes | Yes (plugins) | No | Yes | Yes (since v2.1.46) |
 | Claude Cowork | Yes | Yes | Yes | Yes | Yes |
 
-**CC connector bridge**: Since [v2.1.46 (Feb 18, 2026)][cc-changelog], Claude Code can use claude.ai MCP connectors — including Gmail, Google Drive, and Google Calendar. Users authenticate via claude.ai; CC accesses them through the MCP bridge.
+### Claude Code MCP Bridge (v2.1.46+)
+
+Since [v2.1.46 (Feb 18, 2026)][cc-changelog], Claude Code automatically surfaces MCP servers configured in claude.ai — including Gmail, Google Drive, and Google Calendar connectors.
+
+**Setup** ([source][cc-mcp-docs]):
+
+1. Configure connectors at [claude.ai/settings/connectors](https://claude.ai/settings/connectors) (Team/Enterprise: admin-only)
+2. Complete authentication in claude.ai
+3. In Claude Code, run `/mcp` — claude.ai servers appear with indicators showing their origin
+
+**Opt out**: `ENABLE_CLAUDEAI_MCP_SERVERS=false claude` (added in [v2.1.63, Feb 28, 2026][cc-changelog])
+
+**v2.1.71 fixes** (March 7, 2026):
+
+- Fixed startup UI freeze when many connectors refresh OAuth tokens simultaneously
+- Fixed connectors failing to reconnect after OAuth token refresh
+- Fixed startup notification noise for unauthenticated org connectors
+- Removed notification spam for every org-configured connector
 
 ## Google Connectors Detail
 
@@ -82,13 +101,13 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 | Aspect | Fit | Rationale |
 |--------|-----|-----------|
 | Code execution | No | Connectors are for data access, not compute |
-| Research input | Yes | Drive/Gmail feed docs and threads into agent context via CC MCP bridge |
+| Research input | Yes | Drive/Gmail feed docs and threads into CC context via MCP bridge |
 | Task automation | Low | Google connectors are read-only; no write actions |
 | CI/CD integration | No | Use GitHub Actions or Claude Code directly |
 | Multi-repo orchestration | No | Connectors don't provide repo-level operations |
 | Enterprise admin | Yes | Connectors + plugins provisioning via admin controls |
 
-**Bottom line**: Since v2.1.46, all claude.ai connectors work in Claude Code via the MCP bridge. Google connectors are read-only but useful for ingesting docs, emails, and calendar context into coding agent workflows. GitHub and Slack connectors support both read and write actions.
+**Bottom line**: Since v2.1.46, all claude.ai connectors work in Claude Code via the MCP bridge. Google connectors are read-only but useful for ingesting docs, emails, and calendar context into coding workflows. GitHub and Slack connectors support both read and write.
 
 ## Discovery
 
@@ -101,6 +120,7 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 - [Google Drive connector][drive]
 - [Gmail connector][gmail]
 - [Google Calendar connector][calendar]
+- [CC MCP docs][cc-mcp-docs]
 - [MCP specification][mcp]
 - [Cowork plugins & enterprise analysis](CC-cowork-plugins-enterprise-analysis.md)
 
@@ -110,3 +130,4 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 [calendar]: https://claude.com/docs/connectors/google/calendar
 [mcp]: https://modelcontextprotocol.io
 [cc-changelog]: https://code.claude.com/docs/en/changelog
+[cc-mcp-docs]: https://code.claude.com/docs/en/mcp
