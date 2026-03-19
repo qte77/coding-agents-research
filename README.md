@@ -2,61 +2,31 @@
 
 > Field research and feature analysis for AI coding agents — from sandboxing internals to agent orchestration.
 
-## Overview
+## Why
 
-A collection of independent, deep-dive analyses of Claude Code (CC) features,
-capabilities, and integration patterns. Each document evaluates a specific CC
-feature through the lens of practical adoption: what it does, how it works,
-when to use it, and when to skip it.
+Understand how Claude Code works under the hood so you can make informed adopt/defer/skip decisions before building production systems with it.
+
+## What
+
+Standalone deep-dive analyses of CC features, each following a consistent format:
+**What it is** → **How it works** → **Adoption decision** → **Action items**
 
 ## Contents
 
-### Anthropic Native (`docs/cc-native/`)
-
-| Directory | Analyses |
+| Directory | What's there |
 |---|---|
-| [`agents-skills/`](docs/cc-native/agents-skills/) | Agent Teams, Skills adoption, Ralph loop enhancements, recursive spawning patterns, CLI-Anything analysis, plans as skill/rule templates |
-| [`ci-execution/`](docs/cc-native/ci-execution/) | Sandboxing, permissions bypass, cloud sessions, remote control, remote access landscape, version pinning & self-hosted runners, GitHub Actions & Claude App, status monitoring & Statuspage API |
-| [`context-memory/`](docs/cc-native/context-memory/) | Extended context (1M tokens), memory system (with path-scoped rules deep dive), llms.txt |
-| [`configuration/`](docs/cc-native/configuration/) | Model/provider configuration, fast mode, hooks system, bash mode (with SDK & community refs), /loop cron system |
-| [`plugins-ecosystem/`](docs/cc-native/plugins-ecosystem/) | Plugin packaging, cowork/enterprise plugins, Chrome extension, web scraping plugins, official plugins landscape, Cowork/Skills API programmatic workflows |
-| [`CC-changelog-feature-scan.md`](docs/cc-native/CC-changelog-feature-scan.md) | Changelog triage of new CC features (v2.1.0–2.1.71) |
+| [`docs/cc-native/`](docs/cc-native/) | Anthropic-native features: agents/skills, CI/sandboxing, context/memory, configuration, plugins/ecosystem |
+| [`docs/community/`](docs/community/) | Community skills, plugins, tooling, and domain-specific CLAUDE.md patterns |
+| [`triage/`](triage/) | Auto-generated monitor outputs: outage archive, changelog triage, community triage |
+| [`.github/`](.github/README.md) | CI automation: monitors, scripts, templates — see [.github/README.md](.github/README.md) |
 
-### Community & Third-Party (`docs/community/`)
+## How it stays current
 
-| Document | Coverage |
-|---|---|
-| [`CC-community-skills-landscape.md`](docs/community/CC-community-skills-landscape.md) | Community skill libraries: gstack, pm-skills, claude-code-best-practice |
-| [`CC-community-plugins-landscape.md`](docs/community/CC-community-plugins-landscape.md) | Plugin catalogs: awesome-claude-code, awesome-claude-code-plugins |
-| [`CC-community-tooling-landscape.md`](docs/community/CC-community-tooling-landscape.md) | Developer tooling: RTK (Rust Token Killer) context compression |
-| [`CC-domain-claudemd-showcase.md`](docs/community/CC-domain-claudemd-showcase.md) | Domain-specific CLAUDE.md patterns: genome analysis pipeline |
-
-### Triage (`triage/`)
-
-| Directory | Contents |
-|---|---|
-| [`status-monitor/`](triage/status-monitor/) | Outage archive (`outages.jsonl`) and auto-generated statistics (`outage-stats.md`) |
-| [`cc-changelog/`](triage/cc-changelog/) | Timestamped CC changelog triage reports |
-| [`community/`](triage/community/) | Timestamped community monitor triage reports |
-
-### Other
-
-| [`examples/`](docs/cc-native/examples/) | Settings, statusline, rules, and user preferences |
-
-## Structure
-
-Each file is a standalone analysis following a consistent format:
-
-- **What it is** — feature description and mechanics
-- **How it works** — technical details, configuration, limitations
-- **Adoption decision** — adopt / defer / skip, with rationale
-- **Action items** — concrete next steps if adopting
+Three automated monitors poll external sources on cron and open triage PRs when new content is found. See [`.github/README.md`](.github/README.md) for details.
 
 ## Origin
 
-These analyses were originally produced as part of
-[Agents-eval](https://github.com/qte77/Agents-eval) to inform adoption
-decisions for a multi-agent evaluation framework built on Claude Code.
+These analyses were originally produced as part of [Agents-eval](https://github.com/qte77/Agents-eval) to inform adoption decisions for a multi-agent evaluation framework built on Claude Code.
 
 ## License
 
