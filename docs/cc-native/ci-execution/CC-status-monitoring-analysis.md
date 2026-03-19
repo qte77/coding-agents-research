@@ -129,7 +129,7 @@ Generated from the archive as `triage/status-monitor/outage-stats.md`, covering:
 - **`repository_dispatch`** (`status-change` event) — retained for future webhook proxy
 - **`workflow_dispatch`** — manual trigger for testing
 
-Changes are committed directly to `main` by the workflow bot (append-only factual data, no human triage needed).
+Changes are submitted via PR (branch protection requires PRs on `main`). Unlike other monitors, no timestamped report copies are created — `outages.jsonl` is the sole database and `outage-stats.md` the derived view.
 
 ## Design Decisions
 
@@ -137,7 +137,7 @@ Changes are committed directly to `main` by the workflow bot (append-only factua
 |----------|-----------|
 | JSONL, not database | Git-native, diffable, appendable, zero dependencies |
 | Stdlib-only scripts | Consistent with existing monitors (no pandas/numpy) |
-| Direct commit to `main` | Append-only factual data, no human triage needed |
+| PR without timestamped report | Branch protection requires PRs; no redundant report copies needed |
 | Upsert by incident ID | Handles new incidents and resolution updates idempotently |
 | 4-hour cron, no webhook | Webhook needs proxy; cron catches everything with zero infra |
 | `triage/` directory | Consolidates all monitor outputs under a single root |
