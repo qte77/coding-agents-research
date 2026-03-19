@@ -37,13 +37,15 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 
 ## Platform Availability
 
-| Platform | Remote MCP | Local MCP | MCP Apps | Plugins |
-|----------|-----------|-----------|----------|---------|
-| Claude.ai | Yes | No | Yes | No |
-| Claude Desktop | Yes | Yes | Yes | Yes |
-| Claude Mobile | Yes | No | No | No |
-| Claude Code | Yes | Yes (plugins) | No | Yes |
-| Claude Cowork | Yes | Yes | Yes | Yes |
+| Platform | Remote MCP | Local MCP | MCP Apps | Plugins | claude.ai Connectors |
+|----------|-----------|-----------|----------|---------|---------------------|
+| Claude.ai | Yes | No | Yes | No | Native |
+| Claude Desktop | Yes | Yes | Yes | Yes | Yes |
+| Claude Mobile | Yes | No | No | No | Yes |
+| Claude Code | Yes | Yes (plugins) | No | Yes | Yes (since v2.1.46) |
+| Claude Cowork | Yes | Yes | Yes | Yes | Yes |
+
+**CC connector bridge**: Since [v2.1.46 (Feb 18, 2026)][cc-changelog], Claude Code can use claude.ai MCP connectors — including Gmail, Google Drive, and Google Calendar. Users authenticate via claude.ai; CC accesses them through the MCP bridge.
 
 ## Google Connectors Detail
 
@@ -80,13 +82,13 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 | Aspect | Fit | Rationale |
 |--------|-----|-----------|
 | Code execution | No | Connectors are for data access, not compute |
-| Research input | Conditional | Drive/Gmail could feed docs into agent context |
+| Research input | Yes | Drive/Gmail feed docs and threads into agent context via CC MCP bridge |
 | Task automation | Low | Google connectors are read-only; no write actions |
 | CI/CD integration | No | Use GitHub Actions or Claude Code directly |
 | Multi-repo orchestration | No | Connectors don't provide repo-level operations |
 | Enterprise admin | Yes | Connectors + plugins provisioning via admin controls |
 
-**Bottom line**: Connectors are consumer/enterprise productivity features (read your email, check your calendar). For coding agent workflows, GitHub and Slack connectors are relevant; Google connectors are useful only if agents need to ingest docs/emails as context.
+**Bottom line**: Since v2.1.46, all claude.ai connectors work in Claude Code via the MCP bridge. Google connectors are read-only but useful for ingesting docs, emails, and calendar context into coding agent workflows. GitHub and Slack connectors support both read and write actions.
 
 ## Discovery
 
@@ -107,3 +109,4 @@ Connectors extend Claude via [MCP (Model Context Protocol)][mcp] — an open sta
 [gmail]: https://claude.com/docs/connectors/google/gmail
 [calendar]: https://claude.com/docs/connectors/google/calendar
 [mcp]: https://modelcontextprotocol.io
+[cc-changelog]: https://code.claude.com/docs/en/changelog
