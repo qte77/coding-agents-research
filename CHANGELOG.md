@@ -13,6 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `.github/README.md`: CI automation overview — monitors, scripts, state, triage pipeline
+- `.github/ISSUE_TEMPLATE/`: bug report, question, and config templates
+- Header comments on all 3 workflow YAMLs describing purpose and output
+
+### Changed
+
+- `cc-status-monitor.yaml`: replace `create-triage-pr` with inline PR creation — no timestamped report copies, `outages.jsonl` as sole database
+- `cc-status-monitor.yaml`, `cc-changelog-monitor.yaml`, `cc-changelog-community-monitor.yaml`: upgrade `actions/checkout` v4→v6 and `actions/setup-python` v5→v6 (Node.js 24)
+- `PULL_REQUEST_TEMPLATE.md`: add CI validation and security checklist sections
+- `README.md`: simplify as concise entrypoint with why/what/how structure
+
+### Removed
+
+- `triage/status-monitor/2026-03-18-status-report.md`: redundant timestamped copy of `outage-stats.md`
+
+---
+
+### Added
+
 - `docs/cc-native/plugins-ecosystem/CC-connectors-overview.md`: MCP connectors analysis — prebuilt integrations (Google Drive/Gmail/Calendar, GitHub, Slack, M365), custom connector types, platform availability, Google connector deep-dives, applicability to coding agent workflows
 - `docs/cc-native/plugins-ecosystem/CC-cowork-skills-api-workflows.md`: Cowork, Skills API, CC Web, Chrome extension programmatic workflow analysis — API endpoints, cross-surface availability, community orchestration tools, multi-repo cloud execution patterns
 - `.github/scripts/lib/monitor_utils.py`: shared utilities (keyword extraction, doc scanning, coverage checking, state management, HTTP fetching)
