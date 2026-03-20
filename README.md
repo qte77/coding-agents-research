@@ -16,6 +16,7 @@ Standalone deep-dive analyses of CC features, each following a consistent format
 | Directory | What's there |
 |---|---|
 | [`docs/cc-native/`](docs/cc-native/) | Anthropic-native features: agents/skills, CI/sandboxing, context/memory, configuration, plugins/ecosystem |
+| [`docs/non-cc/`](docs/non-cc/) | Non-CC agents and orchestrators: JetBrains Air, agent-era/devteam |
 | [`docs/community/`](docs/community/) | Community skills, plugins, tooling, and domain-specific CLAUDE.md patterns |
 | [`triage/`](triage/) | Auto-generated monitor outputs: outage archive, changelog triage, community triage |
 | [`.github/`](.github/README.md) | CI automation: monitors, scripts, templates — see [.github/README.md](.github/README.md) |
